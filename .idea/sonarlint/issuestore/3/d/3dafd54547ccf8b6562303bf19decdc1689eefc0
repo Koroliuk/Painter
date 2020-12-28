@@ -1,0 +1,21 @@
+
+e
+java:S1874G"CRemove this use of "getExternalStorageDirectory"; it is deprecated.(‰‚òĞıÿÿÿÿ8ÙÿÜê.
+c	java:S899Q"BDo something with the "boolean" value returned by "createNewFile".(Ğ’Íùÿÿÿÿ8ÙÿÜê.
+p
+java:S1104"SMake context a static final constant or non-public and provide accessors if needed.(Òò®­8…•€ê.
+J
+java:S1444"-Make this "public static context" field final(Òò®­8÷ã“ê.
+o
+java:S1104"RMake bitmap a static final constant or non-public and provide accessors if needed.(à”£½8ü×Ã÷é.
+W
+java:S1128";Remove this unused import 'android.content.ContextWrapper'.(ªÒ¡r8ÙÿÜê.
+y
+java:S1104"WMake imageBitmap a static final constant or non-public and provide accessors if needed.(ó¶ŞÊúÿÿÿÿ8äìê.
+r
+java:S1450"URemove the "canvas" field and declare it as a local variable in the relevant methods.(Šïï8ÆÏşê.
+\
+java:S1128":Remove this unused import 'java.io.FileNotFoundException'.(·î™ùÿÿÿÿ8ÚØşê.
+p
+java:S4042P"NUse "java.nio.file.Files#delete" here for better messages on error conditions.(²Œ­ûÿÿÿÿ8ÙÿÜê.
+\	java:S899P";Do something with the "boolean" value returned by "delete".(²Œ­ûÿÿÿÿ8ÙÿÜê.

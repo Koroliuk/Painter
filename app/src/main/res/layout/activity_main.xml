@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+    <com.koroliuk.painter.scrolling.MyScrollView
+        android:id="@+id/scroll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical">
+        <com.koroliuk.painter.scrolling.MyHorizontalScrollView
+            android:id="@+id/scroll_hor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scrollbars="horizontal">
+            <LinearLayout
+                android:id="@+id/main_linear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="bottom">
+                <com.koroliuk.painter.editor.PainterView
+                    android:id="@+id/painter_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#FFF6F6"
+                    android:isScrollContainer="true"/>
+            </LinearLayout>
+        </com.koroliuk.painter.scrolling.MyHorizontalScrollView>
+    </com.koroliuk.painter.scrolling.MyScrollView>
+</LinearLayout>

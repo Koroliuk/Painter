@@ -1,0 +1,19 @@
+
+X	java:S110#"<This class has 9 parents which is greater than 5 authorized.(²Ú±8´¢½Œê.
+X
+java:S2696."6Make the enclosing method "static" or remove this set.(âÁÇƒüÿÿÿÿ8´¢½Œê.
+U
+java:S1128"8Remove this unused import 'androidx.annotation.NonNull'.(ˆÛúÜ8‘Æüê.
+O
+java:S1128"-Remove this unused import 'android.Manifest'.(¦øïúÿÿÿÿ8Ÿ¥ıê.
+O
+java:S1874›"1Remove this use of "getBitmap"; it is deprecated.(‡ÿÃÒ8‡Ó’ê.
+`
+java:S1128">Remove this unused import 'android.content.pm.PackageManager'.(€®¥õÿÿÿÿÿ8‘Æüê.
+Z
+java:S1128"=Remove this unused import 'androidx.core.app.ActivityCompat'.(ş¤—²8Ÿ¥ıê.
+C	java:S131?""Add a default case to this switch.(Ò“ÿšùÿÿÿÿ8‡Ó’ê.
+X
+java:S2696/"6Make the enclosing method "static" or remove this set.(é°‚°øÿÿÿÿ8ĞáÃê.
+V
+java:S1128"9Remove this unused import 'android.annotation.TargetApi'.(¥Îì‘8‘Æüê.

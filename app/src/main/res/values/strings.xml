@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Drawer</string>
+    <string name="create">Створити</string>
+    <string name="open">Відкрити</string>
+    <string name="save">Зберегти</string>
+    <string name="save_as">Зберегти як .png</string>
+    <string name="exit">Вихід</string>
+    <string name="change_size">Змінити розміри</string>
+    <string name="create_dialog_title">Створення полотна</string>
+    <string name="create_dialog_message">Створення полотна</string>
+    <string name="create_dialog_positive_button">Створити</string>
+    <string name="dialog_negative_button">Назад</string>
+    <string name="create_dialog_height">Висота: </string>
+    <string name="create_dialog_width">Ширина: </string>
+    <string name="save_dialog">Введіть назву файлу: </string>
+    <string name="save_dialog_title">Збереження</string>
+    <string name="width">Товщина:</string>
+    <string name="get_width_title">Введіть товщину: </string>
+</resources>
