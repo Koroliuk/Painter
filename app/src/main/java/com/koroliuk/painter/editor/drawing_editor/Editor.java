@@ -2,13 +2,13 @@ package com.koroliuk.painter.editor.drawing_editor;
 
 import android.view.MotionEvent;
 
-import com.koroliuk.painter.editor.PainterView;
+import com.koroliuk.painter.editor.DrawerView;
 
 public abstract class Editor {
 
-    public PainterView myEditor;
+    public DrawerView myEditor;
 
-    public  Editor(PainterView myEditor) {
+    public  Editor(DrawerView myEditor) {
         this.myEditor = myEditor;
     }
 

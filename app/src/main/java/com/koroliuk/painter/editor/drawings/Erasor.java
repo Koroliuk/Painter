@@ -2,9 +2,6 @@ package com.koroliuk.painter.editor.drawings;
 
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.view.MotionEvent;
-
-import com.koroliuk.painter.editor.PainterView;
 
 public class Erasor extends Shape {
 

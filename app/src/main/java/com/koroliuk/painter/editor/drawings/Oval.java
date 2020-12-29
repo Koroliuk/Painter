@@ -5,8 +5,6 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
-import com.koroliuk.painter.editor.PainterView;
-
 public class Oval extends Shape {
 
 

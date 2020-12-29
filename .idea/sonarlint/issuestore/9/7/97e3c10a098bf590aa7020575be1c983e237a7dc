@@ -1,0 +1,60 @@
+
+p
+java:S3252ÿ"MUse static access with "android.provider.MediaStore$MediaColumns" for "DATA".(ÅöÔ¡üÿÿÿÿ8ê Œµê.
+f
+java:S1874Œ"CRemove this use of "getExternalStorageDirectory"; it is deprecated.(‰‚òĞıÿÿÿÿ8—­í´ê.
+w
+java:S11042"UMake paintFill a static final constant or non-public and provide accessors if needed.(ßƒœÁûÿÿÿÿ8îˆØ¯ê.
+|
+java:S11045"`Make horizontalScrollView a static final constant or non-public and provide accessors if needed.(Ã¨Ÿ%8¦ì¬°ê.
+J
+java:S14447"-Make this "public static context" field final(Òò®­8÷ã“ê.
+p
+java:S1104:"NMake sy a static final constant or non-public and provide accessors if needed.(úƒÃ¶øÿÿÿÿ8€ó˜°ê.
+J
+java:S1874",Remove this use of "DATA"; it is deprecated.(ñ²ùÏ8ê Œµê.
+D	java:S131""Add a default case to this switch.(æ¼õşÿÿÿÿ8¸ª™°ê.
+n
+java:S11046"QMake width a static final constant or non-public and provide accessors if needed.(øÂ½8îˆØ¯ê.
+u
+java:S11048"XMake selectedType a static final constant or non-public and provide accessors if needed.(ÖÊá8îˆØ¯ê.
+o
+java:S11040"RMake canvas a static final constant or non-public and provide accessors if needed.(ñƒ‘ƒ8îˆØ¯ê.
+]	java:S899•";Do something with the "boolean" value returned by "delete".(²Œ­ûÿÿÿÿ8¸ª™°ê.
+t
+java:S11041"WMake paintStroke a static final constant or non-public and provide accessors if needed.(èÛ8îˆØ¯ê.
+?	java:S131«""Add a default case to this switch.(ÜŸ•8íÈ²³ê.
+?	java:S131Å""Add a default case to this switch.(™æÅŠ8¢œÏ³ê.
+w
+java:S1104@"UMake isRecycle a static final constant or non-public and provide accessors if needed.(ëëâšûÿÿÿÿ8­Ï¯Åê.
+d	java:S899–"BDo something with the "boolean" value returned by "createNewFile".(Ğ’Íùÿÿÿÿ8—­í´ê.
+k
+java:S11049"NMake sx a static final constant or non-public and provide accessors if needed.(ğ›¾ï8ºÇ˜°ê.
+v
+java:S11043"TMake isFilled a static final constant or non-public and provide accessors if needed.(‹ší›úÿÿÿÿ8îˆØ¯ê.
+k
+java:S1104<"NMake ey a static final constant or non-public and provide accessors if needed.(å±Ëá8¸ª™°ê.
+z
+java:S1104="XMake showedShapes a static final constant or non-public and provide accessors if needed.(‰ªÕÿÿÿÿÿ8ä´ô²ê.
+n	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ñ²ùÏ8¯ƒŒµê.
+p
+java:S11047"SMake context a static final constant or non-public and provide accessors if needed.(Òò®­8…•€ê.
+X	java:S125a"<This block of commented-out lines of code should be removed.(…îŠë8ëÄïÄê.
+O
+java:S1874ÿ",Remove this use of "DATA"; it is deprecated.(ÅöÔ¡üÿÿÿÿ8ê Œµê.
+x
+java:S11044"VMake scrollView a static final constant or non-public and provide accessors if needed.(ÑôÖÇûÿÿÿÿ8¦ì¬°ê.
+y
+java:S1104/"WMake imageBitmap a static final constant or non-public and provide accessors if needed.(ó¶ŞÊúÿÿÿÿ8äìê.
+x
+java:S1104?"VMake lastEdited a static final constant or non-public and provide accessors if needed.(¹ƒşİşÿÿÿÿ8Ú‘³ê.
+q
+java:S4042•"NUse "java.nio.file.Files#delete" here for better messages on error conditions.(²Œ­ûÿÿÿÿ8—­í´ê.
+o
+java:S1104."RMake bitmap a static final constant or non-public and provide accessors if needed.(à”£½8ü×Ã÷é.
+k
+java:S1104;"NMake ex a static final constant or non-public and provide accessors if needed.(ºù©»8¸ª™°ê.
+k
+java:S3252"MUse static access with "android.provider.MediaStore$MediaColumns" for "DATA".(ñ²ùÏ8ê Œµê.
+w
+java:S1104>"UMake isDrawing a static final constant or non-public and provide accessors if needed.(‚ıéÄşÿÿÿÿ8ºÑÒ°ê.

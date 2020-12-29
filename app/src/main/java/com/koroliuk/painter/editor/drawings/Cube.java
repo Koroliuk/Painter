@@ -3,8 +3,6 @@ package com.koroliuk.painter.editor.drawings;
 import android.graphics.Paint;
 import android.graphics.Path;
 
-import com.koroliuk.painter.editor.PainterView;
-
 public class Cube extends Shape {
 
 

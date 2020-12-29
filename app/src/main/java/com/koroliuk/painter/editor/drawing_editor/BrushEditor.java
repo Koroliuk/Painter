@@ -2,11 +2,11 @@ package com.koroliuk.painter.editor.drawing_editor;
 
 import android.view.MotionEvent;
 
-import com.koroliuk.painter.editor.PainterView;
+import com.koroliuk.painter.editor.DrawerView;
 
 public class BrushEditor extends Editor {
 
-    public BrushEditor(PainterView myEditor) {
+    public BrushEditor(DrawerView myEditor) {
         super(myEditor);
     }
 

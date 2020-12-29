@@ -1,19 +1,128 @@
 
-X	java:S110#"<This class has 9 parents which is greater than 5 authorized.(²Ú±8´¢½Œê.
+p
+java:S3776†"RRefactor this method to reduce its Cognitive Complexity from 72 to the 15 allowed.(öôÈõ8šæÜÅê.
+Y
+java:S1874Ó"6Remove this use of "setColorFilter"; it is deprecated.(Ãúÿÿÿÿ8šæÜÅê.
+Y
+java:S1874î"6Remove this use of "setColorFilter"; it is deprecated.(¯˜±úÿÿÿÿ8šæÜÅê.
+F
+java:S1604–"(Make this anonymous inner class a lambda(çşá8šæÜÅê.
+C	java:S131O""Add a default case to this switch.(Ò“ÿšùÿÿÿÿ8ş“¶ê.
+K
+java:S1604³"(Make this anonymous inner class a lambda(ô–¹éıÿÿÿÿ8šæÜÅê.
+K
+java:S1604"(Make this anonymous inner class a lambda(â½«øÿÿÿÿ8ş“¶ê.
+T
+java:S1874¾"6Remove this use of "setColorFilter"; it is deprecated.(‚·ˆ•8šæÜÅê.
+K
+java:S1604”"(Make this anonymous inner class a lambda(çˆïéùÿÿÿÿ8šæÜÅê.
+K
+java:S1604ü"(Make this anonymous inner class a lambda(ªùâùúÿÿÿÿ8šæÜÅê.
+K
+java:S1604õ"(Make this anonymous inner class a lambda(´×«Óşÿÿÿÿ8šæÜÅê.
+K
+java:S1604Ê"(Make this anonymous inner class a lambda(µ»ßôıÿÿÿÿ8šæÜÅê.
+K
+java:S1604É"(Make this anonymous inner class a lambda(Š¬–Óûÿÿÿÿ8šæÜÅê.
+F
+java:S1604Í"(Make this anonymous inner class a lambda(Ó¾ùÜ8šæÜÅê.
+X	java:S110%"<This class has 9 parents which is greater than 5 authorized.(²Ú±8´¢½Œê.
 X
-java:S2696."6Make the enclosing method "static" or remove this set.(âÁÇƒüÿÿÿÿ8´¢½Œê.
-U
-java:S1128"8Remove this unused import 'androidx.annotation.NonNull'.(ˆÛúÜ8‘Æüê.
-O
-java:S1128"-Remove this unused import 'android.Manifest'.(¦øïúÿÿÿÿ8Ÿ¥ıê.
-O
-java:S1874›"1Remove this use of "getBitmap"; it is deprecated.(‡ÿÃÒ8‡Ó’ê.
-`
-java:S1128">Remove this unused import 'android.content.pm.PackageManager'.(€®¥õÿÿÿÿÿ8‘Æüê.
-Z
-java:S1128"=Remove this unused import 'androidx.core.app.ActivityCompat'.(ş¤—²8Ÿ¥ıê.
-C	java:S131?""Add a default case to this switch.(Ò“ÿšùÿÿÿÿ8‡Ó’ê.
+java:S26964"6Make the enclosing method "static" or remove this set.(ôÎï¿ûÿÿÿÿ8‚Êï©ê.
+K
+java:S1604¸"(Make this anonymous inner class a lambda(ù±ãØøÿÿÿÿ8šæÜÅê.
+K
+java:S1604Ì"(Make this anonymous inner class a lambda(¦âèÁúÿÿÿÿ8šæÜÅê.
+F
+java:S1604¾"(Make this anonymous inner class a lambda(Ş–‚µ8šæÜÅê.
+F
+java:S1604‹"(Make this anonymous inner class a lambda(¯€œ®8šæÜÅê.
+T
+java:S1874‰"6Remove this use of "setColorFilter"; it is deprecated.(«šŠØ8šæÜÅê.
+F
+java:S1604Ó"(Make this anonymous inner class a lambda(™¶¿ 8šæÜÅê.
+F
+java:S1604ã"(Make this anonymous inner class a lambda(™æˆ8šæÜÅê.
+F
+java:S1604ß"(Make this anonymous inner class a lambda(Şªÿ©8šæÜÅê.
+F
+java:S1604Ø"(Make this anonymous inner class a lambda(ñàªİ8šæÜÅê.
+K
+java:S1604·"(Make this anonymous inner class a lambda(´ƒø øÿÿÿÿ8šæÜÅê.
+F
+java:S1604"(Make this anonymous inner class a lambda( ”³ñ8šæÜÅê.
+K
+java:S1604¡"(Make this anonymous inner class a lambda(Õğ¦ùÿÿÿÿ8šæÜÅê.
+Y
+java:S1874¤"6Remove this use of "setColorFilter"; it is deprecated.(€³­Êÿÿÿÿÿ8šæÜÅê.
+J
+java:S1604X"(Make this anonymous inner class a lambda(²ó¼…ıÿÿÿÿ8ş“¶ê.
+Y
+java:S1874‰"6Remove this use of "setColorFilter"; it is deprecated.(Ú•—üÿÿÿÿ8šæÜÅê.
+N
+java:S1874÷"1Remove this use of "getBitmap"; it is deprecated.(¡Ô—8šæÜÅê.
+o
+java:S3776M"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(ñ”Ò8ş“¶ê.
+K
+java:S1604³"(Make this anonymous inner class a lambda(²ó¼…ıÿÿÿÿ8ş“¶ê.
+F
+java:S1604"(Make this anonymous inner class a lambda(· Îå8ş“¶ê.
+K
+java:S1604¯"(Make this anonymous inner class a lambda(×»‡ôşÿÿÿÿ8šæÜÅê.
+K
+java:S1604"(Make this anonymous inner class a lambda(”ĞÙ†şÿÿÿÿ8šæÜÅê.
+F
+java:S1604€"(Make this anonymous inner class a lambda(ÖÔ¨è8šæÜÅê.
+K
+java:S1604ù"(Make this anonymous inner class a lambda(Ÿ»ÁØÿÿÿÿÿ8šæÜÅê.
+F
+java:S1604¬"(Make this anonymous inner class a lambda(§¶‰Ç8šæÜÅê.
+¡
+java:S1192f"„Define a constant instead of duplicating this literal "ĞŸĞµÑ€ĞµĞ²Ñ–Ñ€Ñ‚Ğµ ĞºĞ¾Ñ€ĞµĞºÑ‚Ğ½Ñ–ÑÑ‚ÑŒ Ğ²Ñ…Ñ–Ğ´Ğ½Ğ¸Ñ… Ğ´Ğ°Ğ½Ğ¸Ñ…" 3 times.(†øø78ş“¶ê.
+K
+java:S1604Ô"(Make this anonymous inner class a lambda(Ô«ûôşÿÿÿÿ8šæÜÅê.
+K
+java:S1604Ş"(Make this anonymous inner class a lambda(ˆí·ıÿÿÿÿ8šæÜÅê.
+F
+java:S1604Â"(Make this anonymous inner class a lambda(ÆĞ¦8šæÜÅê.
+F
+java:S1604®"(Make this anonymous inner class a lambda(†ñ¸8šæÜÅê.
+K
+java:S1604î"(Make this anonymous inner class a lambda(¹ó÷ğÿÿÿÿÿ8šæÜÅê.
+K
+java:S1604‡"(Make this anonymous inner class a lambda(ªĞ…”ÿÿÿÿÿ8šæÜÅê.
+F
+java:S1604–"(Make this anonymous inner class a lambda(À¿¬8šæÜÅê.
 X
-java:S2696/"6Make the enclosing method "static" or remove this set.(é°‚°øÿÿÿÿ8ĞáÃê.
-V
-java:S1128"9Remove this unused import 'android.annotation.TargetApi'.(¥Îì‘8‘Æüê.
+java:S26965"6Make the enclosing method "static" or remove this set.(Ş°à½øÿÿÿÿ8ü·ÇÄê.
+F
+java:S1604Ã"(Make this anonymous inner class a lambda(Â×ÎÙ8šæÜÅê.
+K
+java:S1604‚"(Make this anonymous inner class a lambda(ôë´ùÿÿÿÿ8šæÜÅê.
+T
+java:S1874‹"6Remove this use of "setColorFilter"; it is deprecated.(¹ÄœÕ8šæÜÅê.
+K
+java:S1604·"(Make this anonymous inner class a lambda(¿Èùÿÿÿÿÿ8šæÜÅê.
+T
+java:S1874¼"6Remove this use of "setColorFilter"; it is deprecated.(…£Äğ8šæÜÅê.
+E
+java:S1604l"(Make this anonymous inner class a lambda(· Îå8ş“¶ê.
+F
+java:S1604Â"(Make this anonymous inner class a lambda(· Îå8ş“¶ê.
+K
+java:S1604å"(Make this anonymous inner class a lambda(ˆí·ıÿÿÿÿ8šæÜÅê.
+K
+java:S1604¨"(Make this anonymous inner class a lambda(ƒšøÿÿÿÿ8šæÜÅê.
+K
+java:S1604ê"(Make this anonymous inner class a lambda(÷¯Ü°ÿÿÿÿÿ8šæÜÅê.
+T
+java:S1874Ú"6Remove this use of "setColorFilter"; it is deprecated.(¸ïæ8šæÜÅê.
+F
+java:S1604’"(Make this anonymous inner class a lambda(¿“Ö°8šæÜÅê.
+i	java:S128Ì"LEnd this switch case with an unconditional break, return or throw statement.(©áòÎ8ş“¶ê.
+T
+java:S1874¿"6Remove this use of "setColorFilter"; it is deprecated.(î‘ŞŒ8šæÜÅê.
+F
+java:S1604ù"(Make this anonymous inner class a lambda(¬®Ó½8šæÜÅê.
+K
+java:S1604ç"(Make this anonymous inner class a lambda(ğÄ×üÿÿÿÿ8šæÜÅê.

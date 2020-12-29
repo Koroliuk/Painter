@@ -2,8 +2,6 @@ package com.koroliuk.painter.editor.drawings;
 
 import android.graphics.Paint;
 
-import com.koroliuk.painter.editor.PainterView;
-
 public class Rect extends Shape {
 
 

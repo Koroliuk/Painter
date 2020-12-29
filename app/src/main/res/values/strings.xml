@@ -12,6 +12,7 @@
     <string name="dialog_negative_button">Назад</string>
     <string name="create_dialog_height">Висота: </string>
     <string name="create_dialog_width">Ширина: </string>
+    <string name="create_dialog_color">Колір фону: </string>
     <string name="save_dialog">Введіть назву файлу: </string>
     <string name="save_dialog_title">Збереження</string>
     <string name="width">Товщина:</string>

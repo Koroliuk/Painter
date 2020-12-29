@@ -41,39 +41,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class PainterView extends View {
+public class DrawerView extends View {
 
+    public static Context context;
+    public MyScrollView scrollView;
+    public MyHorizontalScrollView horizontalScrollView;
+    public boolean isDrawing;
+    public boolean isRecycle;
+    public List<Shape> showedShapes = new ArrayList<>();
     public Bitmap bitmap;
     public Bitmap imageBitmap;
     public Canvas canvas;
     public Paint paintStroke;
     public Paint paintFill;
+    public String backgroundColor;
+    public Shape lastEdited;
     public boolean isFilled;
-    public MyScrollView scrollView;
-    public MyHorizontalScrollView horizontalScrollView;
     public int width;
-    public static Context context;
     public int selectedType;
     public float sx;
     public float sy;
     public float ex;
     public float ey;
-    public List<Shape> showedShapes = new ArrayList<>();
-    public boolean isDrawing;
-    public Shape lastEdited;
 
-    public PainterView(Context context) {
-        super(context);
-        paintStroke = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paintStroke.setStyle(Paint.Style.STROKE);
-        paintStroke.setStrokeWidth(20);
-        paintFill = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paintFill.setStyle(Paint.Style.FILL);
-        paintFill.setColor(Color.TRANSPARENT);
-    }
-
-    public PainterView(Context context, AttributeSet attrs) {
+    public DrawerView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        backgroundColor = "#FFFFFF";
         paintStroke = new Paint(Paint.ANTI_ALIAS_FLAG);
         paintStroke.setStyle(Paint.Style.STROKE);
         paintStroke.setStrokeWidth(20);
@@ -85,19 +78,21 @@ public class PainterView extends View {
     @Override
     public void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        if (imageBitmap == null) {
-            bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        } else {
+        bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        if (canvas == null) {
+            canvas = new Canvas(bitmap);
+            draw(canvas);
+        }
+        if (imageBitmap != null) {
             bitmap = imageBitmap.copy(Bitmap.Config.ARGB_8888, true);
         }
-        canvas = new Canvas(bitmap);
-        draw(canvas);
     }
 
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (bitmap != null) {
+            canvas.drawColor(Color.parseColor(backgroundColor));
             canvas.drawBitmap(bitmap, 0, 0, null);
             for (Shape shape : showedShapes) {
                 shape.draw();
@@ -110,6 +105,17 @@ public class PainterView extends View {
                 }
                 lastEdited.draw();
             }
+            if (isRecycle) {
+                isRecycle = false;
+                canvas.drawColor(Color.parseColor("#C2C5C6"));
+            }
+        }
+    }
+
+    public void recycle() {
+        if (!isDrawing) {
+            isDrawing = true;
+            invalidate();
         }
     }
 
