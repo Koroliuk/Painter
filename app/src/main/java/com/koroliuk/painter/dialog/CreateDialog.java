@@ -65,8 +65,8 @@ public class CreateDialog extends DialogFragment {
                     try {
                         height = Integer.parseInt(String.valueOf(editTextHeight.getText()));
                         width = Integer.parseInt(String.valueOf(editTextWidth.getText()));
-                        if (height <= 0 || which <= 0) {
-                            int k = 1/0;
+                        if (height <= 0 || width <= 0) {
+                            throw new Exception();
                         }
                         if (isChanging) {
                             MainActivity.changeSize(width, height, color);
