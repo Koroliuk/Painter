@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">Drawer</string>
+    <string name="app_name">Painter</string>
     <string name="create">Створити</string>
     <string name="open">Відкрити</string>
     <string name="save">Зберегти</string>
-    <string name="save_as">Зберегти як .png</string>
+    <string name="save_as">Зберегти як</string>
     <string name="exit">Вихід</string>
     <string name="change_size">Змінити розміри</string>
     <string name="create_dialog_title">Створення полотна</string>

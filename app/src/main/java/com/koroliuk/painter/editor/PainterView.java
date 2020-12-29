@@ -14,9 +14,9 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.koroliuk.painter.State;
 import com.koroliuk.painter.editor.drawing_editor.BrushEditor;
 import com.koroliuk.painter.editor.drawing_editor.CubeEditor;
 import com.koroliuk.painter.editor.drawing_editor.ErasorEditor;
@@ -47,8 +47,9 @@ public class PainterView extends View {
     public MyScrollView scrollView;
     public MyHorizontalScrollView horizontalScrollView;
     public boolean isDrawing;
-    public List<Shape> showedShapes = new ArrayList<>();
-    public Bitmap bitmap;
+    public State state;
+    public List<Shape> showedShapes;
+    public Bitmap mainBitmap;
     public Bitmap imageBitmap;
     public Canvas canvas;
     public Paint paintStroke;
@@ -63,12 +64,13 @@ public class PainterView extends View {
     public float ex;
     public float ey;
 
+
     public PainterView(Context context, AttributeSet attrs) {
         super(context, attrs);
         backgroundColor = "#FFFFFF";
         paintStroke = new Paint(Paint.ANTI_ALIAS_FLAG);
         paintStroke.setStyle(Paint.Style.STROKE);
-        paintStroke.setStrokeWidth(20);
+        paintStroke.setStrokeWidth(10);
         paintFill = new Paint(Paint.ANTI_ALIAS_FLAG);
         paintFill.setStyle(Paint.Style.FILL);
         paintFill.setColor(Color.TRANSPARENT);
@@ -77,22 +79,21 @@ public class PainterView extends View {
     @Override
     public void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        mainBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         if (imageBitmap != null) {
-            bitmap = imageBitmap.copy(Bitmap.Config.ARGB_8888, true);
+            mainBitmap = imageBitmap.copy(Bitmap.Config.ARGB_8888, true);
         }
-        canvas = new Canvas(bitmap);
+        canvas = new Canvas(mainBitmap);
+        state = new State(null, mainBitmap, null);
     }
 
+    @SuppressLint("DrawAllocation")
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (bitmap != null) {
+        if (mainBitmap != null) {
             canvas.drawColor(Color.parseColor(backgroundColor));
-            canvas.drawBitmap(bitmap, 0, 0, null);
-            for (Shape shape : showedShapes) {
-                shape.draw();
-            }
+            canvas.drawBitmap(mainBitmap, 0, 0, null);
             if (isDrawing) {
                 if (lastEdited.type == 1 || lastEdited.type == 6) {
                     lastEdited.canvas = this.canvas;
@@ -104,9 +105,12 @@ public class PainterView extends View {
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint({"ClickableViewAccessibility", "DrawAllocation"})
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (scrollView.isEnableScrolling()) {
+            return true;
+        }
         lastEdited.pStroke = new Paint(paintStroke);
         lastEdited.pFill = new Paint(paintFill);
         switch (selectedType) {
@@ -176,7 +180,9 @@ public class PainterView extends View {
     public void addToDrawen() {
         lastEdited.canvas = canvas;
         lastEdited.draw();
-        showedShapes.add(lastEdited);
+        State newState = new State(state, mainBitmap, null);
+        state.setNext(newState);
+        state = newState;
         start(lastEdited.type);
         invalidate();
     }
@@ -187,12 +193,12 @@ public class PainterView extends View {
             String[] path = file.getAbsolutePath().split("\\.");
             String ext = path[path.length - 1];
             if (ext.equals("png")) {
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                mainBitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
                 Toast toast = Toast.makeText(context, "Збережено", Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
             } else if (ext.equals("jpeg")) {
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                mainBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
                 Toast toast = Toast.makeText(context, "Файл збережено", Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
@@ -232,7 +238,7 @@ public class PainterView extends View {
                 file.delete();
             file.createNewFile();
             fOut = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+            mainBitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
             fOut.flush();
             fOut.close();
             return fullPath+name+".png";

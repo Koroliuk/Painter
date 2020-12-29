@@ -19,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -50,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout mainLayout;
     private ArrayList<ImageButton> imageButtons;
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,6 +157,18 @@ public class MainActivity extends AppCompatActivity {
                 }
                 isToolbarShowed = !isToolbarShowed;
                 break;
+            case R.id.undo:
+                State curr = painterView.state;
+                painterView.state = curr.getPrev();
+                painterView.mainBitmap = painterView.state.getValue();
+                painterView.invalidate();
+                break;
+            case R.id.redo:
+                State curr1 = painterView.state;
+                painterView.state = curr1.getNext();
+                painterView.mainBitmap = painterView.state.getValue();
+                painterView.invalidate();
+                break;
             case R.id.exit:
                 finish();
         }
@@ -174,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void createDrawingPlace(int width, int height, String color, Bitmap imagineBitmap) {
-        painterView.bitmap = null;
+        painterView.mainBitmap = null;
         painterView.imageBitmap = null;
         painterView.showedShapes = new ArrayList<>();
         painterView.isDrawing = false;
@@ -187,16 +199,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void  changeSize(int w, int h, String color) {
-        Bitmap bitmap = painterView.bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Bitmap bitmap = painterView.mainBitmap.copy(Bitmap.Config.ARGB_8888, true);
         int hr = bitmap.getHeight();
         int wr = bitmap.getWidth();
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(w, h);
         painterView.setLayoutParams(params);
         if (hr <= h && wr <= w) {
-            painterView.bitmap = Bitmap.createBitmap(bitmap, 0, 0, w, h);
+            painterView.mainBitmap = Bitmap.createBitmap(bitmap, 0, 0, w, h);
             painterView.onSizeChanged(w, h, bitmap.getWidth(), bitmap.getHeight());
         } else {
-            painterView.bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+            painterView.mainBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
             painterView.onSizeChanged(w, h, bitmap.getWidth(), bitmap.getHeight());
             painterView.canvas.drawBitmap(bitmap, 0, 0, null);
         }
@@ -243,6 +255,8 @@ public class MainActivity extends AppCompatActivity {
         imageButtons.add(buttonOval);
         imageButtons.add(buttonCube);
         imageButtons.add(buttonErasor);
+        LinearLayout layoutStroke = findViewById(R.id.stroke);
+        LinearLayout layoutFill = findViewById(R.id.fill);
         buttonThick.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             LayoutInflater inflater = Objects.requireNonNull(getLayoutInflater());
@@ -274,8 +288,14 @@ public class MainActivity extends AppCompatActivity {
             painterView.isFilled = !painterView.isFilled;
             if (painterView.isFilled) {
                 buttonSetFilled.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+                Drawable drawable = layoutFill.getBackground();
+                if (drawable instanceof ColorDrawable) {
+                    int color = ((ColorDrawable) drawable).getColor();
+                    painterView.paintFill.setColor(color);
+                }
             } else {
                 buttonSetFilled.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
+                painterView.paintFill.setColor(Color.TRANSPARENT);
             }
         });
 
@@ -312,8 +332,6 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        LinearLayout layoutStroke = findViewById(R.id.stroke);
-        LinearLayout layoutFill = findViewById(R.id.fill);
         LinearLayout layout1 = findViewById(R.id.linear1);
         LinearLayout layout2 = findViewById(R.id.linear2);
         LinearLayout layout3 = findViewById(R.id.linear3);
@@ -326,6 +344,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout layout10 = findViewById(R.id.linear10);
         LinearLayout layout11 = findViewById(R.id.linear11);
         LinearLayout layout12 = findViewById(R.id.linear12);
+        painterView.paintStroke.setColor(Color.BLACK);
         List<LinearLayout> layouts = List.of(layout1, layout2, layout3, layout4,
                 layout5, layout6, layout7, layout8,
                 layout9, layout10);
