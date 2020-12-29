@@ -27,8 +27,10 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
-import com.koroliuk.painter.editor.DrawerView;
+import com.koroliuk.painter.dialog.CreateDialog;
+import com.koroliuk.painter.editor.PainterView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,7 +39,7 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("StaticFieldLeak")
-    private static DrawerView drawerView;
+    private static PainterView painterView;
     private Uri selectedImage;
     private Menu menu;
     private boolean isToolbarShowed;
@@ -49,18 +51,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        drawerView = findViewById(R.id.painter_view);
-        DrawerView.context = this;
+        painterView = findViewById(R.id.painter_view);
+        PainterView.context = this;
         isToolbarShowed = true;
         LayoutInflater inflater = getLayoutInflater();
         mainLayout = findViewById(R.id.main_linear);
-        mainLayout.removeView(drawerView);
+        mainLayout.removeView(painterView);
         tableView = inflater.inflate(R.layout.toolbar, mainLayout, false);
         mainLayout.addView(tableView);
-        mainLayout.addView(drawerView);
+        mainLayout.addView(painterView);
         setToolBar();
-        drawerView.scrollView = findViewById(R.id.scroll);
-        drawerView.horizontalScrollView = findViewById(R.id.scroll_hor);
+        painterView.scrollView = findViewById(R.id.scroll);
+        painterView.horizontalScrollView = findViewById(R.id.scroll_hor);
     }
 
     @Override
@@ -78,53 +80,21 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.create:
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-                LayoutInflater inflater1 = Objects.requireNonNull(getLayoutInflater());
-                View view1 = inflater1.inflate(R.layout.create_dialog, null);
-                EditText editTextHeight = view1.findViewById(R.id.height);
-                EditText editTextWidth = view1.findViewById(R.id.width);
-                builder1.setTitle(R.string.create_dialog_title)
-                        .setView(view1)
-                        .setPositiveButton(R.string.create_dialog_positive_button, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    int height = Integer.parseInt(String.valueOf(editTextHeight.getText()));
-                                    int width = Integer.parseInt(String.valueOf(editTextWidth.getText()));
-                                    drawerView.recycle();
-                                    drawerView.bitmap = null;
-                                    drawerView.imageBitmap = null;
-                                    drawerView.showedShapes = new ArrayList<>();
-                                    drawerView.isDrawing = false;
-                                    createDrawingPlace(width, height);
-                                    enableChangeSize(menu);
-                                } catch (Exception e) {
-                                    Toast toast = Toast.makeText(MainActivity.this, "Перевірте коректність вхідних даних", Toast.LENGTH_SHORT);
-                                    toast.setGravity(Gravity.CENTER, 0, 0);
-                                    toast.show();
-                                }
-                            }
-                        })
-                        .setNegativeButton(R.string.dialog_negative_button, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
-                builder1.create();
-                AlertDialog dialog1 = builder1.create();
-                dialog1.show();
+                FragmentManager manager = getSupportFragmentManager();
+                CreateDialog dialog = new CreateDialog(this, false);
+                dialog.show(manager, "CreateDialog");
+                enableChangeSize();
                 break;
             case R.id.open:
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
                 startActivityForResult(intent, 1);
-                enableChangeSize(menu);
-                enableSave(menu);
+                enableChangeSize();
+                enableSave();
                 break;
             case R.id.save:
                 try {
-                    drawerView.saveFile(selectedImage);
+                    painterView.saveFile(selectedImage);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -143,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int which) {
                                     try {
                                         name[0] = String.valueOf(editText2.getText());
-                                        String path = drawerView.saveFileAsPNG(name[0]);
+                                        String path = painterView.saveFileAsPNG(name[0]);
                                         Toast toast = Toast.makeText(MainActivity.this, "Файл збережено " + path, Toast.LENGTH_SHORT);
                                         toast.setGravity(Gravity.CENTER, 0, 0);
                                         toast.show();
@@ -169,85 +139,77 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.change:
-                AlertDialog.Builder builder3 = new AlertDialog.Builder(this);
-                LayoutInflater inflater3 = Objects.requireNonNull(getLayoutInflater());
-                View view3 = inflater3.inflate(R.layout.create_dialog, null);
-                EditText editTextHeight3 = view3.findViewById(R.id.height);
-                EditText editTextWidth3 = view3.findViewById(R.id.width);
-                builder3.setTitle(R.string.create_dialog_title)
-                        .setView(view3)
-                        .setPositiveButton(R.string.create_dialog_positive_button, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    int height = Integer.parseInt(String.valueOf(editTextHeight3.getText()));
-                                    int width = Integer.parseInt(String.valueOf(editTextWidth3.getText()));
-                                    drawerView.changeSize(width, height);
-                                    enableChangeSize(menu);
-                                } catch (Exception e) {
-                                    Toast toast = Toast.makeText(MainActivity.this, "Перевірте коректність вхідних даних", Toast.LENGTH_SHORT);
-                                    toast.setGravity(Gravity.CENTER, 0, 0);
-                                    toast.show();
-                                }
-                            }
-                        })
-                        .setNegativeButton(R.string.dialog_negative_button, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
-                builder3.create();
-                AlertDialog dialog3 = builder3.create();
-                dialog3.show();
+                FragmentManager manager3 = getSupportFragmentManager();
+                CreateDialog dialog3 = new CreateDialog(this, true);
+                dialog3.color = painterView.backgroundColor;
+                dialog3.show(manager3, "CreateDialog");
                 break;
-            case R.id.exit:
-                finish();
             case R.id.toolbar:
                 if (isToolbarShowed) {
                     mainLayout.removeView(tableView);
                 } else {
-                    mainLayout.removeView(drawerView);
+                    mainLayout.removeView(painterView);
                     mainLayout.addView(tableView);
-                    mainLayout.addView(drawerView);
+                    mainLayout.addView(painterView);
                 }
                 isToolbarShowed = !isToolbarShowed;
                 break;
+            case R.id.exit:
+                finish();
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void enableSave(Menu menu) {
+    private void enableSave() {
         MenuItem changeSizeMenuItem = menu.findItem(R.id.save);
         changeSizeMenuItem.setEnabled(true);
     }
 
-    private void enableChangeSize(Menu menu) {
+    private void enableChangeSize() {
         MenuItem changeSizeMenuItem = menu.findItem(R.id.change);
         changeSizeMenuItem.setEnabled(true);
     }
 
-    public static void createDrawingPlace(int width, int height, String color) {
+    public static void createDrawingPlace(int width, int height, String color, Bitmap imagineBitmap) {
+        painterView.bitmap = null;
+        painterView.imageBitmap = null;
+        painterView.showedShapes = new ArrayList<>();
+        painterView.isDrawing = false;
+        if (imagineBitmap != null) {
+            painterView.imageBitmap = imagineBitmap;
+        }
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, height);
-        drawerView.setLayoutParams(params);
-        drawerView.backgroundColor = color;
+        painterView.setLayoutParams(params);
+        painterView.backgroundColor = color;
+    }
+
+    public static void  changeSize(int w, int h, String color) {
+        Bitmap bitmap = painterView.bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        int hr = bitmap.getHeight();
+        int wr = bitmap.getWidth();
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(w, h);
+        painterView.setLayoutParams(params);
+        if (hr <= h && wr <= w) {
+            painterView.bitmap = Bitmap.createBitmap(bitmap, 0, 0, w, h);
+            painterView.onSizeChanged(w, h, bitmap.getWidth(), bitmap.getHeight());
+        } else {
+            painterView.bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+            painterView.onSizeChanged(w, h, bitmap.getWidth(), bitmap.getHeight());
+            painterView.canvas.drawBitmap(bitmap, 0, 0, null);
+        }
+        painterView.backgroundColor = color;
+        painterView.invalidate();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (data != null) {
-            enableSave(menu);
+            enableSave();
             selectedImage = data.getData();
             try {
-                drawerView.recycle();
-                drawerView.bitmap = null;
-                drawerView.imageBitmap = null;
-                drawerView.showedShapes = new ArrayList<>();
-                drawerView.isDrawing = false;
                 Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
-                drawerView.imageBitmap = imageBitmap;
-                createDrawingPlace(imageBitmap.getWidth(), imageBitmap.getHeight());
+                createDrawingPlace(imageBitmap.getWidth(), imageBitmap.getHeight(), "#FFFFFF", imageBitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -287,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
                         .setView(view)
                         .setPositiveButton(R.string.create_dialog_positive_button, (dialog, which) -> {
                             try {
-                                drawerView.width = Integer.parseInt(String.valueOf(editTextWidth.getText()));
+                                painterView.width = Integer.parseInt(String.valueOf(editTextWidth.getText()));
                             } catch (Exception e) {
                                 Toast toast = Toast.makeText(MainActivity.this, "Перевірте коректність вхідних даних", Toast.LENGTH_SHORT);
                                 toast.setGravity(Gravity.CENTER, 0, 0);
@@ -312,8 +274,8 @@ public class MainActivity extends AppCompatActivity {
         buttonSetFilled.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                drawerView.isFilled = !drawerView.isFilled;
-                if (drawerView.isFilled) {
+                painterView.isFilled = !painterView.isFilled;
+                if (painterView.isFilled) {
                     buttonSetFilled.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
                 } else {
                     buttonSetFilled.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
@@ -333,18 +295,18 @@ public class MainActivity extends AppCompatActivity {
         buttonBrush.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (drawerView.selectedType == 1) {
-                    drawerView.selectedType = 0;
-                    drawerView.scrollView.setEnableScrolling(true);
-                    drawerView.horizontalScrollView.setEnableScrolling(true);
+                if (painterView.selectedType == 1) {
+                    painterView.selectedType = 0;
+                    painterView.scrollView.setEnableScrolling(true);
+                    painterView.horizontalScrollView.setEnableScrolling(true);
                     buttonBrush.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
 
                 } else {
-                    drawerView.scrollView.setEnableScrolling(false);
-                    drawerView.horizontalScrollView.setEnableScrolling(false);
+                    painterView.scrollView.setEnableScrolling(false);
+                    painterView.horizontalScrollView.setEnableScrolling(false);
                     optionOn(buttonBrush);
-                    drawerView.selectedType = 1;
-                    drawerView.start(1);
+                    painterView.selectedType = 1;
+                    painterView.start(1);
                 }
             }
         });
@@ -360,18 +322,18 @@ public class MainActivity extends AppCompatActivity {
         buttonLine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (drawerView.selectedType == 2) {
-                    drawerView.selectedType = 0;
-                    drawerView.scrollView.setEnableScrolling(true);
-                    drawerView.horizontalScrollView.setEnableScrolling(true);
+                if (painterView.selectedType == 2) {
+                    painterView.selectedType = 0;
+                    painterView.scrollView.setEnableScrolling(true);
+                    painterView.horizontalScrollView.setEnableScrolling(true);
                     buttonLine.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
 
                 } else {
-                    drawerView.scrollView.setEnableScrolling(false);
-                    drawerView.horizontalScrollView.setEnableScrolling(false);
+                    painterView.scrollView.setEnableScrolling(false);
+                    painterView.horizontalScrollView.setEnableScrolling(false);
                     optionOn(buttonLine);
-                    drawerView.selectedType = 2;
-                    drawerView.start(2);
+                    painterView.selectedType = 2;
+                    painterView.start(2);
                 }
             }
         });
@@ -387,18 +349,18 @@ public class MainActivity extends AppCompatActivity {
         buttonRect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (drawerView.selectedType == 3) {
-                    drawerView.selectedType = 0;
-                    drawerView.scrollView.setEnableScrolling(true);
-                    drawerView.horizontalScrollView.setEnableScrolling(true);
+                if (painterView.selectedType == 3) {
+                    painterView.selectedType = 0;
+                    painterView.scrollView.setEnableScrolling(true);
+                    painterView.horizontalScrollView.setEnableScrolling(true);
                     buttonRect.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
 
                 } else {
-                    drawerView.scrollView.setEnableScrolling(false);
-                    drawerView.horizontalScrollView.setEnableScrolling(false);
+                    painterView.scrollView.setEnableScrolling(false);
+                    painterView.horizontalScrollView.setEnableScrolling(false);
                     optionOn(buttonRect);
-                    drawerView.selectedType = 3;
-                    drawerView.start(3);
+                    painterView.selectedType = 3;
+                    painterView.start(3);
                 }
             }
         });
@@ -414,18 +376,18 @@ public class MainActivity extends AppCompatActivity {
         buttonOval.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (drawerView.selectedType == 4) {
-                    drawerView.selectedType = 0;
-                    drawerView.scrollView.setEnableScrolling(true);
-                    drawerView.horizontalScrollView.setEnableScrolling(true);
+                if (painterView.selectedType == 4) {
+                    painterView.selectedType = 0;
+                    painterView.scrollView.setEnableScrolling(true);
+                    painterView.horizontalScrollView.setEnableScrolling(true);
                     buttonOval.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
 
                 } else {
-                    drawerView.scrollView.setEnableScrolling(false);
-                    drawerView.horizontalScrollView.setEnableScrolling(false);
+                    painterView.scrollView.setEnableScrolling(false);
+                    painterView.horizontalScrollView.setEnableScrolling(false);
                     optionOn(buttonOval);
-                    drawerView.selectedType = 4;
-                    drawerView.start(4);
+                    painterView.selectedType = 4;
+                    painterView.start(4);
                 }
             }
         });
@@ -441,18 +403,18 @@ public class MainActivity extends AppCompatActivity {
         buttonCube.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (drawerView.selectedType == 5) {
-                    drawerView.selectedType = 0;
-                    drawerView.scrollView.setEnableScrolling(true);
-                    drawerView.horizontalScrollView.setEnableScrolling(true);
+                if (painterView.selectedType == 5) {
+                    painterView.selectedType = 0;
+                    painterView.scrollView.setEnableScrolling(true);
+                    painterView.horizontalScrollView.setEnableScrolling(true);
                     buttonCube.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
 
                 } else {
-                    drawerView.scrollView.setEnableScrolling(false);
-                    drawerView.horizontalScrollView.setEnableScrolling(false);
+                    painterView.scrollView.setEnableScrolling(false);
+                    painterView.horizontalScrollView.setEnableScrolling(false);
                     optionOn(buttonCube);
-                    drawerView.selectedType = 5;
-                    drawerView.start(5);
+                    painterView.selectedType = 5;
+                    painterView.start(5);
                 }
             }
         });
@@ -468,18 +430,18 @@ public class MainActivity extends AppCompatActivity {
         buttonErasor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (drawerView.selectedType == 6) {
-                    drawerView.selectedType = 0;
-                    drawerView.scrollView.setEnableScrolling(true);
-                    drawerView.horizontalScrollView.setEnableScrolling(true);
+                if (painterView.selectedType == 6) {
+                    painterView.selectedType = 0;
+                    painterView.scrollView.setEnableScrolling(true);
+                    painterView.horizontalScrollView.setEnableScrolling(true);
                     buttonErasor.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
 
                 } else {
-                    drawerView.scrollView.setEnableScrolling(false);
-                    drawerView.horizontalScrollView.setEnableScrolling(false);
+                    painterView.scrollView.setEnableScrolling(false);
+                    painterView.horizontalScrollView.setEnableScrolling(false);
                     optionOn(buttonErasor);
-                    drawerView.selectedType = 6;
-                    drawerView.start(6);
+                    painterView.selectedType = 6;
+                    painterView.start(6);
                 }
             }
         });
@@ -513,7 +475,7 @@ public class MainActivity extends AppCompatActivity {
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutStroke.setBackgroundColor(color);
-                    drawerView.paintStroke.setColor(color);
+                    painterView.paintStroke.setColor(color);
                 }
             }
         });
@@ -524,7 +486,7 @@ public class MainActivity extends AppCompatActivity {
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutFill.setBackgroundColor(color);
-                    drawerView.paintFill.setColor(color);                 }
+                    painterView.paintFill.setColor(color);                 }
                 return true;
             }
         });
@@ -535,7 +497,7 @@ public class MainActivity extends AppCompatActivity {
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutStroke.setBackgroundColor(color);
-                    drawerView.paintStroke.setColor(color);
+                    painterView.paintStroke.setColor(color);
                 }
             }
         });
@@ -546,7 +508,7 @@ public class MainActivity extends AppCompatActivity {
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutFill.setBackgroundColor(color);
-                    drawerView.paintFill.setColor(color);                 }
+                    painterView.paintFill.setColor(color);                 }
                 return true;
             }
         });
@@ -557,7 +519,7 @@ public class MainActivity extends AppCompatActivity {
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutStroke.setBackgroundColor(color);
-                    drawerView.paintStroke.setColor(color);
+                    painterView.paintStroke.setColor(color);
                 }
             }
         });
@@ -568,7 +530,7 @@ public class MainActivity extends AppCompatActivity {
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutFill.setBackgroundColor(color);
-                    drawerView.paintFill.setColor(color);                 }
+                    painterView.paintFill.setColor(color);                 }
                 return true;
             }
         });
@@ -579,7 +541,7 @@ public class MainActivity extends AppCompatActivity {
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutStroke.setBackgroundColor(color);
-                    drawerView.paintStroke.setColor(color);
+                    painterView.paintStroke.setColor(color);
                 }
             }
         });
@@ -590,7 +552,7 @@ public class MainActivity extends AppCompatActivity {
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutFill.setBackgroundColor(color);
-                    drawerView.paintFill.setColor(color);                 }
+                    painterView.paintFill.setColor(color);                 }
                 return true;
             }
         });
@@ -601,7 +563,7 @@ public class MainActivity extends AppCompatActivity {
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutStroke.setBackgroundColor(color);
-                    drawerView.paintStroke.setColor(color);
+                    painterView.paintStroke.setColor(color);
                 }
             }
         });
@@ -612,7 +574,7 @@ public class MainActivity extends AppCompatActivity {
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutFill.setBackgroundColor(color);
-                    drawerView.paintFill.setColor(color);                 }
+                    painterView.paintFill.setColor(color);                 }
                 return true;
             }
         });
@@ -623,7 +585,7 @@ public class MainActivity extends AppCompatActivity {
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutStroke.setBackgroundColor(color);
-                    drawerView.paintStroke.setColor(color);
+                    painterView.paintStroke.setColor(color);
                 }
             }
         });
@@ -634,7 +596,7 @@ public class MainActivity extends AppCompatActivity {
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutFill.setBackgroundColor(color);
-                    drawerView.paintFill.setColor(color);                 }
+                    painterView.paintFill.setColor(color);                 }
                 return true;
             }
         });
@@ -645,7 +607,7 @@ public class MainActivity extends AppCompatActivity {
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutStroke.setBackgroundColor(color);
-                    drawerView.paintStroke.setColor(color);
+                    painterView.paintStroke.setColor(color);
                 }
             }
         });
@@ -656,7 +618,7 @@ public class MainActivity extends AppCompatActivity {
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutFill.setBackgroundColor(color);
-                    drawerView.paintFill.setColor(color);                 }
+                    painterView.paintFill.setColor(color);                 }
                 return true;
             }
         });
@@ -667,7 +629,7 @@ public class MainActivity extends AppCompatActivity {
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutStroke.setBackgroundColor(color);
-                    drawerView.paintStroke.setColor(color);
+                    painterView.paintStroke.setColor(color);
                 }
             }
         });
@@ -678,7 +640,7 @@ public class MainActivity extends AppCompatActivity {
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutFill.setBackgroundColor(color);
-                    drawerView.paintFill.setColor(color);                 }
+                    painterView.paintFill.setColor(color);                 }
                 return true;
             }
         });
@@ -689,7 +651,7 @@ public class MainActivity extends AppCompatActivity {
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutStroke.setBackgroundColor(color);
-                    drawerView.paintStroke.setColor(color);
+                    painterView.paintStroke.setColor(color);
                 }
             }
         });
@@ -700,7 +662,7 @@ public class MainActivity extends AppCompatActivity {
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutFill.setBackgroundColor(color);
-                    drawerView.paintFill.setColor(color);                 }
+                    painterView.paintFill.setColor(color);                 }
                 return true;
             }
         });
@@ -711,7 +673,7 @@ public class MainActivity extends AppCompatActivity {
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutStroke.setBackgroundColor(color);
-                    drawerView.paintStroke.setColor(color);
+                    painterView.paintStroke.setColor(color);
                 }
             }
         });
@@ -722,7 +684,7 @@ public class MainActivity extends AppCompatActivity {
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutFill.setBackgroundColor(color);
-                    drawerView.paintFill.setColor(color);                 }
+                    painterView.paintFill.setColor(color);                 }
                 return true;
             }
         });
@@ -733,7 +695,7 @@ public class MainActivity extends AppCompatActivity {
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutStroke.setBackgroundColor(color);
-                    drawerView.paintStroke.setColor(color);
+                    painterView.paintStroke.setColor(color);
                 }
             }
         });
@@ -744,7 +706,7 @@ public class MainActivity extends AppCompatActivity {
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutFill.setBackgroundColor(color);
-                    drawerView.paintFill.setColor(color);                 }
+                    painterView.paintFill.setColor(color);                 }
                 return true;
             }
         });
@@ -755,7 +717,7 @@ public class MainActivity extends AppCompatActivity {
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutStroke.setBackgroundColor(color);
-                    drawerView.paintStroke.setColor(color);
+                    painterView.paintStroke.setColor(color);
                 }
             }
         });
@@ -766,7 +728,7 @@ public class MainActivity extends AppCompatActivity {
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutFill.setBackgroundColor(color);
-                    drawerView.paintFill.setColor(color);
+                    painterView.paintFill.setColor(color);
                 }
                 return true;
             }

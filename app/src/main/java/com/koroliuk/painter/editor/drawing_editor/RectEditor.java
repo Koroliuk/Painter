@@ -2,11 +2,11 @@ package com.koroliuk.painter.editor.drawing_editor;
 
 import android.view.MotionEvent;
 
-import com.koroliuk.painter.editor.DrawerView;
+import com.koroliuk.painter.editor.PainterView;
 
 public class RectEditor extends Editor {
 
-    public RectEditor(DrawerView myEditor) {
+    public RectEditor(PainterView myEditor) {
         super(myEditor);
     }
 

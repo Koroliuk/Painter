@@ -41,13 +41,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class DrawerView extends View {
+public class PainterView extends View {
 
     public static Context context;
     public MyScrollView scrollView;
     public MyHorizontalScrollView horizontalScrollView;
     public boolean isDrawing;
-    public boolean isRecycle;
     public List<Shape> showedShapes = new ArrayList<>();
     public Bitmap bitmap;
     public Bitmap imageBitmap;
@@ -64,7 +63,7 @@ public class DrawerView extends View {
     public float ex;
     public float ey;
 
-    public DrawerView(Context context, AttributeSet attrs) {
+    public PainterView(Context context, AttributeSet attrs) {
         super(context, attrs);
         backgroundColor = "#FFFFFF";
         paintStroke = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -105,17 +104,6 @@ public class DrawerView extends View {
                 }
                 lastEdited.draw();
             }
-            if (isRecycle) {
-                isRecycle = false;
-                canvas.drawColor(Color.parseColor("#C2C5C6"));
-            }
-        }
-    }
-
-    public void recycle() {
-        if (!isDrawing) {
-            isDrawing = true;
-            invalidate();
         }
     }
 
@@ -198,15 +186,6 @@ public class DrawerView extends View {
                 lastEdited = new Erasor(paintStroke, paintFill, 6);
                 break;
         }
-        invalidate();
-    }
-
-    public void  changeSize(int w, int h) {
-        Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0, w, h);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(w, h);
-        this.setLayoutParams(params);
-        onSizeChanged(w, h, bitmap.getWidth(), bitmap.getHeight());
-        bitmap = newBitmap;
         invalidate();
     }
 

@@ -2,10 +2,10 @@ package com.koroliuk.painter.editor.drawing_editor;
 
 import android.view.MotionEvent;
 
-import com.koroliuk.painter.editor.DrawerView;
+import com.koroliuk.painter.editor.PainterView;
 
 public class OvalEditor extends Editor {
-    public OvalEditor(DrawerView myEditor) {
+    public OvalEditor(PainterView myEditor) {
         super(myEditor);
     }
 

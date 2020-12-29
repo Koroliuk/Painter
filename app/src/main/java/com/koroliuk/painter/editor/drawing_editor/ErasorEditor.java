@@ -2,11 +2,11 @@ package com.koroliuk.painter.editor.drawing_editor;
 
 import android.view.MotionEvent;
 
-import com.koroliuk.painter.editor.DrawerView;
+import com.koroliuk.painter.editor.PainterView;
 
 public class ErasorEditor extends Editor {
 
-    public ErasorEditor(DrawerView myEditor) {
+    public ErasorEditor(PainterView myEditor) {
         super(myEditor);
     }
 

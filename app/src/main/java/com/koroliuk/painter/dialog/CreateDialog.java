@@ -30,9 +30,10 @@ public class CreateDialog extends DialogFragment {
     public Context context;
     public boolean isChanging;
 
-    public CreateDialog(Context context) {
+    public CreateDialog(Context context, boolean isChanging) {
         super();
         this.context = context;
+        this.isChanging = isChanging;
         color = "#FFFFFF";
     }
 
@@ -64,11 +65,21 @@ public class CreateDialog extends DialogFragment {
                     try {
                         height = Integer.parseInt(String.valueOf(editTextHeight.getText()));
                         width = Integer.parseInt(String.valueOf(editTextWidth.getText()));
-                        MainActivity.createDrawingPlace(width, height, color);
+                        if (height <= 0 || which <= 0) {
+                            int k = 1/0;
+                        }
+                        if (isChanging) {
+                            MainActivity.changeSize(width, height, color);
+                        } else {
+                            MainActivity.createDrawingPlace(width, height, color, null);
+                        }
                     } catch (Exception e) {
-                        Toast toast = Toast.makeText(context, "Перевірте коректність вхідних даних", Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
+                        if (!(e.toString().equals("java.lang.IllegalArgumentException: x + width must be <= bitmap.width()") ||
+                                e.toString().equals("java.lang.IllegalArgumentException: x + height must be <= bitmap.height()"))) {
+                            Toast toast = Toast.makeText(context, "Перевірте коректність вхідних даних", Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                        }
                     }
                 })
                 .setNegativeButton(R.string.dialog_negative_button, (dialog, which) -> dialog.cancel());

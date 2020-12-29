@@ -18,7 +18,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_gravity="bottom">
-                <com.koroliuk.painter.editor.DrawerView
+                <com.koroliuk.painter.editor.PainterView
                     android:id="@+id/painter_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

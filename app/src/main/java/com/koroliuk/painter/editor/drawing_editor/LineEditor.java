@@ -2,11 +2,11 @@ package com.koroliuk.painter.editor.drawing_editor;
 
 import android.view.MotionEvent;
 
-import com.koroliuk.painter.editor.DrawerView;
+import com.koroliuk.painter.editor.PainterView;
 
 public class LineEditor extends Editor {
-    public LineEditor(DrawerView drawerView) {
-        super(drawerView);
+    public LineEditor(PainterView painterView) {
+        super(painterView);
     }
 
     @Override
