@@ -107,6 +107,8 @@ public class PainterView extends View {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        lastEdited.pStroke = new Paint(paintStroke);
+        lastEdited.pFill = new Paint(paintFill);
         switch (selectedType) {
             case 1:
                 BrushEditor brushEditor = new BrushEditor(this);
@@ -139,22 +141,34 @@ public class PainterView extends View {
     public void start(int type) {
         switch (type) {
             case 1:
-                lastEdited = new Brush(paintStroke, paintFill, 1);
+                Paint pStroke1 = new Paint(paintStroke);
+                Paint pFill1 = new Paint(paintFill);
+                lastEdited = new Brush(pStroke1, pFill1, 1);
                 break;
             case 2:
-                lastEdited = new Line(paintStroke, paintFill, 2);
+                Paint pStroke2 = new Paint(paintStroke);
+                Paint pFill2 = new Paint(paintFill);
+                lastEdited = new Line(pStroke2, pFill2, 2);
                 break;
             case 3:
-                lastEdited = new Rect(paintStroke, paintFill, 3);
+                Paint pStroke3 = new Paint(paintStroke);
+                Paint pFill3 = new Paint(paintFill);
+                lastEdited = new Rect(pStroke3, pFill3, 3);
                 break;
             case 4:
-                lastEdited = new Oval(paintStroke, paintFill, 4);
+                Paint pStroke4 = new Paint(paintStroke);
+                Paint pFill4 = new Paint(paintFill);
+                lastEdited = new Oval(pStroke4, pFill4, 4);
                 break;
             case 5:
-                lastEdited = new Cube(paintStroke, paintFill, 5);
+                Paint pStroke5 = new Paint(paintStroke);
+                Paint pFill5 = new Paint(paintFill);
+                lastEdited = new Cube(pStroke5, pFill5, 5);
                 break;
             case 6:
-                lastEdited = new Erasor(paintStroke, paintFill, 6);
+                Paint pStroke6 = new Paint(paintStroke);
+                Paint pFill6 = new Paint(paintFill);
+                lastEdited = new Erasor(pStroke6, pFill6, 6);
                 break;
         }
     }
@@ -163,26 +177,7 @@ public class PainterView extends View {
         lastEdited.canvas = canvas;
         lastEdited.draw();
         showedShapes.add(lastEdited);
-        switch (lastEdited.type) {
-            case 1:
-                lastEdited = new Brush(paintStroke, paintFill, 1);
-                break;
-            case 2:
-                lastEdited = new Line(paintStroke, paintFill, 2);
-                break;
-            case 3:
-                lastEdited = new Rect(paintStroke, paintFill, 3);
-                break;
-            case 4:
-                lastEdited = new Oval(paintStroke, paintFill, 4);
-                break;
-            case 5:
-                lastEdited = new Cube(paintStroke, paintFill, 5);
-                break;
-            case 6:
-                lastEdited = new Erasor(paintStroke, paintFill, 6);
-                break;
-        }
+        start(lastEdited.type);
         invalidate();
     }
 

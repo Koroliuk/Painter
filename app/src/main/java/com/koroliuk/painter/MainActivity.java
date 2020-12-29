@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -29,11 +30,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import com.azeesoft.lib.colorpicker.ColorPickerDialog;
 import com.koroliuk.painter.dialog.CreateDialog;
 import com.koroliuk.painter.editor.PainterView;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -222,6 +225,7 @@ public class MainActivity extends AppCompatActivity {
         return Environment.MEDIA_MOUNTED.equals(state);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     public void  setToolBar() {
         ImageButton buttonThick = findViewById(R.id.thickness);
         ImageButton buttonSetFilled = findViewById(R.id.filled);
@@ -231,6 +235,7 @@ public class MainActivity extends AppCompatActivity {
         ImageButton buttonOval = findViewById(R.id.oval);
         ImageButton buttonCube = findViewById(R.id.cube);
         ImageButton buttonErasor = findViewById(R.id.erasor);
+        List<String> labels = List.of("Пензлик", "Лінія", "Прямокутник", "Овал", "Куб", "Гумка");
         imageButtons = new ArrayList<>();
         imageButtons.add(buttonBrush);
         imageButtons.add(buttonLine);
@@ -238,222 +243,75 @@ public class MainActivity extends AppCompatActivity {
         imageButtons.add(buttonOval);
         imageButtons.add(buttonCube);
         imageButtons.add(buttonErasor);
-        buttonThick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                LayoutInflater inflater = Objects.requireNonNull(getLayoutInflater());
-                View view = inflater.inflate(R.layout.thickness_dialog, null);
-                EditText editTextWidth = view.findViewById(R.id.get_width);
-                builder.setTitle(R.string.get_width_title)
-                        .setView(view)
-                        .setPositiveButton(R.string.create_dialog_positive_button, (dialog, which) -> {
-                            try {
-                                painterView.width = Integer.parseInt(String.valueOf(editTextWidth.getText()));
-                            } catch (Exception e) {
-                                Toast toast = Toast.makeText(MainActivity.this, "Перевірте коректність вхідних даних", Toast.LENGTH_SHORT);
-                                toast.setGravity(Gravity.CENTER, 0, 0);
-                                toast.show();
-                            }
-                        })
-                        .setNegativeButton(R.string.dialog_negative_button, (dialog, which) -> dialog.cancel());
-                builder.create();
-                AlertDialog dialog1 = builder.create();
-                dialog1.show();
+        buttonThick.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            LayoutInflater inflater = Objects.requireNonNull(getLayoutInflater());
+            View view = inflater.inflate(R.layout.thickness_dialog, null);
+            EditText editTextWidth = view.findViewById(R.id.get_width);
+            builder.setTitle(R.string.get_width_title)
+                    .setView(view)
+                    .setPositiveButton(R.string.create_dialog_positive_button, (dialog, which) -> {
+                        try {
+                            painterView.width = Integer.parseInt(String.valueOf(editTextWidth.getText()));
+                        } catch (Exception e) {
+                            Toast toast = Toast.makeText(MainActivity.this, "Перевірте коректність вхідних даних", Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                        }
+                    })
+                    .setNegativeButton(R.string.dialog_negative_button, (dialog, which) -> dialog.cancel());
+            builder.create();
+            AlertDialog dialog1 = builder.create();
+            dialog1.show();
+        });
+        buttonThick.setOnLongClickListener(v -> {
+            Toast toast = Toast.makeText(MainActivity.this, "Товщина", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.TOP, 0, 0);
+            toast.show();
+            return true;
+        });
+        buttonSetFilled.setOnClickListener(v -> {
+            painterView.isFilled = !painterView.isFilled;
+            if (painterView.isFilled) {
+                buttonSetFilled.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+            } else {
+                buttonSetFilled.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
             }
         });
-        buttonThick.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Toast toast = Toast.makeText(MainActivity.this, "Товщина", Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.TOP, 0, 0);
-                toast.show();
-                return true;
-            }
-        });
-        buttonSetFilled.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                painterView.isFilled = !painterView.isFilled;
-                if (painterView.isFilled) {
-                    buttonSetFilled.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
-                } else {
-                    buttonSetFilled.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
-                }
 
-            }
+        buttonSetFilled.setOnLongClickListener(v -> {
+            Toast toast = Toast.makeText(MainActivity.this, "Заповнення", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.TOP, 0, 0);
+            toast.show();
+            return true;
         });
-        buttonSetFilled.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Toast toast = Toast.makeText(MainActivity.this, "Заповнення", Toast.LENGTH_SHORT);
+
+        for (int i = 0; i < imageButtons.size(); i++) {
+            ImageButton button = imageButtons.get(i);
+            int finalI = i;
+            button.setOnLongClickListener(v -> {
+                Toast toast = Toast.makeText(MainActivity.this, labels.get(finalI), Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.TOP, 0, 0);
                 toast.show();
                 return true;
-            }
-        });
-        buttonBrush.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (painterView.selectedType == 1) {
+            });
+            button.setOnClickListener(v -> {
+                if (painterView.selectedType == finalI +1) {
                     painterView.selectedType = 0;
                     painterView.scrollView.setEnableScrolling(true);
                     painterView.horizontalScrollView.setEnableScrolling(true);
-                    buttonBrush.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
+                    button.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
 
                 } else {
                     painterView.scrollView.setEnableScrolling(false);
                     painterView.horizontalScrollView.setEnableScrolling(false);
-                    optionOn(buttonBrush);
-                    painterView.selectedType = 1;
-                    painterView.start(1);
+                    optionOn(button);
+                    painterView.selectedType = finalI +1;
+                    painterView.start(finalI +1);
                 }
-            }
-        });
-        buttonBrush.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Toast toast = Toast.makeText(MainActivity.this, "Пензлик", Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.TOP, 0, 0);
-                toast.show();
-                return true;
-            }
-        });
-        buttonLine.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (painterView.selectedType == 2) {
-                    painterView.selectedType = 0;
-                    painterView.scrollView.setEnableScrolling(true);
-                    painterView.horizontalScrollView.setEnableScrolling(true);
-                    buttonLine.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
+            });
+        }
 
-                } else {
-                    painterView.scrollView.setEnableScrolling(false);
-                    painterView.horizontalScrollView.setEnableScrolling(false);
-                    optionOn(buttonLine);
-                    painterView.selectedType = 2;
-                    painterView.start(2);
-                }
-            }
-        });
-        buttonLine.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Toast toast = Toast.makeText(MainActivity.this, "Лінія", Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.TOP, 0, 0);
-                toast.show();
-                return true;
-            }
-        });
-        buttonRect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (painterView.selectedType == 3) {
-                    painterView.selectedType = 0;
-                    painterView.scrollView.setEnableScrolling(true);
-                    painterView.horizontalScrollView.setEnableScrolling(true);
-                    buttonRect.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
-
-                } else {
-                    painterView.scrollView.setEnableScrolling(false);
-                    painterView.horizontalScrollView.setEnableScrolling(false);
-                    optionOn(buttonRect);
-                    painterView.selectedType = 3;
-                    painterView.start(3);
-                }
-            }
-        });
-        buttonRect.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Toast toast = Toast.makeText(MainActivity.this, "Прямокутник", Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.TOP, 0, 0);
-                toast.show();
-                return true;
-            }
-        });
-        buttonOval.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (painterView.selectedType == 4) {
-                    painterView.selectedType = 0;
-                    painterView.scrollView.setEnableScrolling(true);
-                    painterView.horizontalScrollView.setEnableScrolling(true);
-                    buttonOval.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
-
-                } else {
-                    painterView.scrollView.setEnableScrolling(false);
-                    painterView.horizontalScrollView.setEnableScrolling(false);
-                    optionOn(buttonOval);
-                    painterView.selectedType = 4;
-                    painterView.start(4);
-                }
-            }
-        });
-        buttonOval.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Toast toast = Toast.makeText(MainActivity.this, "Овал", Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.TOP, 0, 0);
-                toast.show();
-                return true;
-            }
-        });
-        buttonCube.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (painterView.selectedType == 5) {
-                    painterView.selectedType = 0;
-                    painterView.scrollView.setEnableScrolling(true);
-                    painterView.horizontalScrollView.setEnableScrolling(true);
-                    buttonCube.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
-
-                } else {
-                    painterView.scrollView.setEnableScrolling(false);
-                    painterView.horizontalScrollView.setEnableScrolling(false);
-                    optionOn(buttonCube);
-                    painterView.selectedType = 5;
-                    painterView.start(5);
-                }
-            }
-        });
-        buttonCube.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Toast toast = Toast.makeText(MainActivity.this, "Куб", Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.TOP, 0, 0);
-                toast.show();
-                return true;
-            }
-        });
-        buttonErasor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (painterView.selectedType == 6) {
-                    painterView.selectedType = 0;
-                    painterView.scrollView.setEnableScrolling(true);
-                    painterView.horizontalScrollView.setEnableScrolling(true);
-                    buttonErasor.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
-
-                } else {
-                    painterView.scrollView.setEnableScrolling(false);
-                    painterView.horizontalScrollView.setEnableScrolling(false);
-                    optionOn(buttonErasor);
-                    painterView.selectedType = 6;
-                    painterView.start(6);
-                }
-            }
-        });
-        buttonBrush.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Toast toast = Toast.makeText(MainActivity.this, "Гумка", Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.TOP, 0, 0);
-                toast.show();
-                return true;
-            }
-        });
         LinearLayout layoutStroke = findViewById(R.id.stroke);
         LinearLayout layoutFill = findViewById(R.id.fill);
         LinearLayout layout1 = findViewById(R.id.linear1);
@@ -468,271 +326,70 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout layout10 = findViewById(R.id.linear10);
         LinearLayout layout11 = findViewById(R.id.linear11);
         LinearLayout layout12 = findViewById(R.id.linear12);
-        layout1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Drawable drawable = layout1.getBackground();
+        List<LinearLayout> layouts = List.of(layout1, layout2, layout3, layout4,
+                layout5, layout6, layout7, layout8,
+                layout9, layout10);
+        List<LinearLayout> spec = List.of(layout11, layout12);
+        for (LinearLayout layout : layouts) {
+            layout.setOnClickListener(v -> {
+                Drawable drawable = layout.getBackground();
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutStroke.setBackgroundColor(color);
                     painterView.paintStroke.setColor(color);
                 }
-            }
-        });
-        layout1.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Drawable drawable = layout1.getBackground();
+            });
+            layout.setOnLongClickListener(v -> {
+                Drawable drawable = layout.getBackground();
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
                     layoutFill.setBackgroundColor(color);
                     painterView.paintFill.setColor(color);                 }
                 return true;
-            }
-        });
-        layout2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Drawable drawable = layout2.getBackground();
+            });
+        }
+        for (LinearLayout layout : spec) {
+            layout.setOnClickListener(v -> {
+                Drawable drawable = layout.getBackground();
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
-                    layoutStroke.setBackgroundColor(color);
-                    painterView.paintStroke.setColor(color);
+                    StringBuilder c = new StringBuilder("");
+                    ColorPickerDialog colorPickerDialog = ColorPickerDialog.createColorPickerDialog(this);
+                    colorPickerDialog.setPositiveActionText("Обрати");
+                    colorPickerDialog.setNegativeActionText("Назад");
+                    colorPickerDialog.setLastColor(color);
+                    colorPickerDialog.setInitialColor(Color.BLUE);
+                    colorPickerDialog.setSliderThumbColor(Color.RED);
+                    colorPickerDialog.setOnColorPickedListener((chosenColor, hexVal) -> {
+                        c.append(hexVal);
+                        layout.setBackgroundColor(Color.parseColor(hexVal));
+                        layoutStroke.setBackgroundColor(Color.parseColor(String.valueOf(c)));
+                        painterView.paintStroke.setColor(Color.parseColor(String.valueOf(c)));
+                    });
+                    colorPickerDialog.show();
                 }
-            }
-        });
-        layout2.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Drawable drawable = layout2.getBackground();
+            });
+            layout.setOnLongClickListener(v -> {
+                Drawable drawable = layout.getBackground();
                 if (drawable instanceof ColorDrawable) {
                     int color = ((ColorDrawable) drawable).getColor();
-                    layoutFill.setBackgroundColor(color);
-                    painterView.paintFill.setColor(color);                 }
+                    StringBuilder c = new StringBuilder("");
+                    ColorPickerDialog colorPickerDialog = ColorPickerDialog.createColorPickerDialog(this);
+                    colorPickerDialog.setPositiveActionText("Обрати");
+                    colorPickerDialog.setNegativeActionText("Назад");
+                    colorPickerDialog.setLastColor(color);
+                    colorPickerDialog.setInitialColor(color);
+                    colorPickerDialog.setSliderThumbColor(Color.RED);
+                    colorPickerDialog.setOnColorPickedListener((chosenColor, hexVal) -> {
+                        c.append(hexVal);
+                        layout.setBackgroundColor(Color.parseColor(hexVal));
+                        layoutFill.setBackgroundColor(Color.parseColor(String.valueOf(c)));
+                        painterView.paintFill.setColor(Color.parseColor(String.valueOf(c)));
+                    });
+                    colorPickerDialog.show();         }
                 return true;
-            }
-        });
-        layout3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Drawable drawable = layout3.getBackground();
-                if (drawable instanceof ColorDrawable) {
-                    int color = ((ColorDrawable) drawable).getColor();
-                    layoutStroke.setBackgroundColor(color);
-                    painterView.paintStroke.setColor(color);
-                }
-            }
-        });
-        layout3.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Drawable drawable = layout3.getBackground();
-                if (drawable instanceof ColorDrawable) {
-                    int color = ((ColorDrawable) drawable).getColor();
-                    layoutFill.setBackgroundColor(color);
-                    painterView.paintFill.setColor(color);                 }
-                return true;
-            }
-        });
-        layout4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Drawable drawable = layout4.getBackground();
-                if (drawable instanceof ColorDrawable) {
-                    int color = ((ColorDrawable) drawable).getColor();
-                    layoutStroke.setBackgroundColor(color);
-                    painterView.paintStroke.setColor(color);
-                }
-            }
-        });
-        layout4.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Drawable drawable = layout4.getBackground();
-                if (drawable instanceof ColorDrawable) {
-                    int color = ((ColorDrawable) drawable).getColor();
-                    layoutFill.setBackgroundColor(color);
-                    painterView.paintFill.setColor(color);                 }
-                return true;
-            }
-        });
-        layout5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Drawable drawable = layout5.getBackground();
-                if (drawable instanceof ColorDrawable) {
-                    int color = ((ColorDrawable) drawable).getColor();
-                    layoutStroke.setBackgroundColor(color);
-                    painterView.paintStroke.setColor(color);
-                }
-            }
-        });
-        layout5.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Drawable drawable = layout5.getBackground();
-                if (drawable instanceof ColorDrawable) {
-                    int color = ((ColorDrawable) drawable).getColor();
-                    layoutFill.setBackgroundColor(color);
-                    painterView.paintFill.setColor(color);                 }
-                return true;
-            }
-        });
-        layout6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Drawable drawable = layout6.getBackground();
-                if (drawable instanceof ColorDrawable) {
-                    int color = ((ColorDrawable) drawable).getColor();
-                    layoutStroke.setBackgroundColor(color);
-                    painterView.paintStroke.setColor(color);
-                }
-            }
-        });
-        layout6.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Drawable drawable = layout6.getBackground();
-                if (drawable instanceof ColorDrawable) {
-                    int color = ((ColorDrawable) drawable).getColor();
-                    layoutFill.setBackgroundColor(color);
-                    painterView.paintFill.setColor(color);                 }
-                return true;
-            }
-        });
-        layout7.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Drawable drawable = layout7.getBackground();
-                if (drawable instanceof ColorDrawable) {
-                    int color = ((ColorDrawable) drawable).getColor();
-                    layoutStroke.setBackgroundColor(color);
-                    painterView.paintStroke.setColor(color);
-                }
-            }
-        });
-        layout7.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Drawable drawable = layout7.getBackground();
-                if (drawable instanceof ColorDrawable) {
-                    int color = ((ColorDrawable) drawable).getColor();
-                    layoutFill.setBackgroundColor(color);
-                    painterView.paintFill.setColor(color);                 }
-                return true;
-            }
-        });
-        layout8.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Drawable drawable = layout8.getBackground();
-                if (drawable instanceof ColorDrawable) {
-                    int color = ((ColorDrawable) drawable).getColor();
-                    layoutStroke.setBackgroundColor(color);
-                    painterView.paintStroke.setColor(color);
-                }
-            }
-        });
-        layout8.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Drawable drawable = layout8.getBackground();
-                if (drawable instanceof ColorDrawable) {
-                    int color = ((ColorDrawable) drawable).getColor();
-                    layoutFill.setBackgroundColor(color);
-                    painterView.paintFill.setColor(color);                 }
-                return true;
-            }
-        });
-        layout9.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Drawable drawable = layout9.getBackground();
-                if (drawable instanceof ColorDrawable) {
-                    int color = ((ColorDrawable) drawable).getColor();
-                    layoutStroke.setBackgroundColor(color);
-                    painterView.paintStroke.setColor(color);
-                }
-            }
-        });
-        layout9.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Drawable drawable = layout9.getBackground();
-                if (drawable instanceof ColorDrawable) {
-                    int color = ((ColorDrawable) drawable).getColor();
-                    layoutFill.setBackgroundColor(color);
-                    painterView.paintFill.setColor(color);                 }
-                return true;
-            }
-        });
-        layout10.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Drawable drawable = layout10.getBackground();
-                if (drawable instanceof ColorDrawable) {
-                    int color = ((ColorDrawable) drawable).getColor();
-                    layoutStroke.setBackgroundColor(color);
-                    painterView.paintStroke.setColor(color);
-                }
-            }
-        });
-        layout10.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Drawable drawable = layout10.getBackground();
-                if (drawable instanceof ColorDrawable) {
-                    int color = ((ColorDrawable) drawable).getColor();
-                    layoutFill.setBackgroundColor(color);
-                    painterView.paintFill.setColor(color);                 }
-                return true;
-            }
-        });
-        layout11.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Drawable drawable = layout11.getBackground();
-                if (drawable instanceof ColorDrawable) {
-                    int color = ((ColorDrawable) drawable).getColor();
-                    layoutStroke.setBackgroundColor(color);
-                    painterView.paintStroke.setColor(color);
-                }
-            }
-        });
-        layout11.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Drawable drawable = layout11.getBackground();
-                if (drawable instanceof ColorDrawable) {
-                    int color = ((ColorDrawable) drawable).getColor();
-                    layoutFill.setBackgroundColor(color);
-                    painterView.paintFill.setColor(color);                 }
-                return true;
-            }
-        });
-        layout12.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Drawable drawable = layout12.getBackground();
-                if (drawable instanceof ColorDrawable) {
-                    int color = ((ColorDrawable) drawable).getColor();
-                    layoutStroke.setBackgroundColor(color);
-                    painterView.paintStroke.setColor(color);
-                }
-            }
-        });
-        layout12.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Drawable drawable = layout12.getBackground();
-                if (drawable instanceof ColorDrawable) {
-                    int color = ((ColorDrawable) drawable).getColor();
-                    layoutFill.setBackgroundColor(color);
-                    painterView.paintFill.setColor(color);
-                }
-                return true;
-            }
-        });
+            });
+        }
     }
 
     public void optionOn(ImageButton button) {
