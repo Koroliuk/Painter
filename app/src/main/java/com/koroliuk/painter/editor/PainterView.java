@@ -78,13 +78,10 @@ public class PainterView extends View {
     public void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        if (canvas == null) {
-            canvas = new Canvas(bitmap);
-            draw(canvas);
-        }
         if (imageBitmap != null) {
             bitmap = imageBitmap.copy(Bitmap.Config.ARGB_8888, true);
         }
+        canvas = new Canvas(bitmap);
     }
 
     @Override
