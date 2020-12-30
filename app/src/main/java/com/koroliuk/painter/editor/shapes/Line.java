@@ -1,7 +1,7 @@
 package com.koroliuk.painter.editor.shapes;
 
 import android.graphics.Paint;
-
+// клас лінії
 public class Line extends Shape {
 
 

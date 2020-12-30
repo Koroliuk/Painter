@@ -3,7 +3,7 @@ package com.koroliuk.painter.editor.shape_editor;
 import android.view.MotionEvent;
 
 import com.koroliuk.painter.editor.PainterView;
-
+// клас редактора куба
 public class CubeEditor extends Editor {
     public CubeEditor(PainterView myEditor) {
         super(myEditor);

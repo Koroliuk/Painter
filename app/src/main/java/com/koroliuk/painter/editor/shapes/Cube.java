@@ -2,7 +2,7 @@ package com.koroliuk.painter.editor.shapes;
 
 import android.graphics.Paint;
 import android.graphics.Path;
-
+// клас куба
 public class Cube extends Shape {
 
 

@@ -3,7 +3,7 @@ package com.koroliuk.painter.editor.shape_editor;
 import android.view.MotionEvent;
 
 import com.koroliuk.painter.editor.PainterView;
-
+// клас редактора пензля
 public class BrushEditor extends Editor {
 
     public BrushEditor(PainterView myEditor) {

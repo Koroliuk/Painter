@@ -1,7 +1,7 @@
 package com.koroliuk.painter.editor.shapes;
 
 import android.graphics.Paint;
-
+// клас приямокутника
 public class Rect extends Shape {
 
 

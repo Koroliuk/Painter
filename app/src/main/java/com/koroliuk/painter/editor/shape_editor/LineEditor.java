@@ -3,7 +3,7 @@ package com.koroliuk.painter.editor.shape_editor;
 import android.view.MotionEvent;
 
 import com.koroliuk.painter.editor.PainterView;
-
+// клас редактора лінії
 public class LineEditor extends Editor {
     public LineEditor(PainterView painterView) {
         super(painterView);

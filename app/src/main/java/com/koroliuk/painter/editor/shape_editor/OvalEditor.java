@@ -3,7 +3,7 @@ package com.koroliuk.painter.editor.shape_editor;
 import android.view.MotionEvent;
 
 import com.koroliuk.painter.editor.PainterView;
-
+// клас редактора овала
 public class OvalEditor extends Editor {
     public OvalEditor(PainterView myEditor) {
         super(myEditor);

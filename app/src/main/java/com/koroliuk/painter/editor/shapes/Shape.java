@@ -3,7 +3,7 @@ package com.koroliuk.painter.editor.shapes;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-
+// клас фігури
 public abstract class Shape {
 
     public Paint pStroke;

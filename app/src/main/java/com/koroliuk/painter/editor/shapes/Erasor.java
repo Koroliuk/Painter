@@ -2,7 +2,7 @@ package com.koroliuk.painter.editor.shapes;
 
 import android.graphics.Color;
 import android.graphics.Paint;
-
+// клас гумки
 public class Erasor extends Shape {
 
     public Erasor(Paint pStroke, Paint pFill, int type) {

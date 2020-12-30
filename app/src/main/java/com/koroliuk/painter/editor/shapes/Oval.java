@@ -4,7 +4,7 @@ import android.graphics.Paint;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
-
+// клас овалу
 public class Oval extends Shape {
 
 
