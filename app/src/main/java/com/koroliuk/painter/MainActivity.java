@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
@@ -42,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("StaticFieldLeak")
     private static PainterView painterView;
+    private static Menu menu;
     private Uri selectedImage;
-    private Menu menu;
     private boolean isToolbarShowed;
     private View tableView;
     private LinearLayout mainLayout;
@@ -86,14 +87,11 @@ public class MainActivity extends AppCompatActivity {
                 FragmentManager manager = getSupportFragmentManager();
                 CreateDialog dialog = new CreateDialog(this, false);
                 dialog.show(manager, "CreateDialog");
-                enableChangeSize();
                 break;
             case R.id.open:
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
                 startActivityForResult(intent, 1);
-                enableChangeSize();
-                enableSave();
                 break;
             case R.id.save:
                 try {
@@ -111,28 +109,20 @@ public class MainActivity extends AppCompatActivity {
                     EditText editText2 = view2.findViewById(R.id.save_dialog);
                     builder2.setTitle(R.string.save_dialog_title)
                             .setView(view2)
-                            .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    try {
-                                        name[0] = String.valueOf(editText2.getText());
-                                        String path = painterView.saveFileAsPNG(name[0]);
-                                        Toast toast = Toast.makeText(MainActivity.this, "Файл збережено " + path, Toast.LENGTH_SHORT);
-                                        toast.setGravity(Gravity.CENTER, 0, 0);
-                                        toast.show();
-                                    } catch (Exception e) {
-                                        Toast toast = Toast.makeText(MainActivity.this, "Перевірте коректність даних", Toast.LENGTH_SHORT);
-                                        toast.setGravity(Gravity.CENTER, 0, 0);
-                                        toast.show();
-                                    }
+                            .setPositiveButton(R.string.save, (dialog12, which) -> {
+                                try {
+                                    name[0] = String.valueOf(editText2.getText());
+                                    String path = painterView.saveFileAsPNG(name[0]);
+                                    Toast toast = Toast.makeText(MainActivity.this, "Файл збережено " + path, Toast.LENGTH_SHORT);
+                                    toast.setGravity(Gravity.CENTER, 0, 0);
+                                    toast.show();
+                                } catch (Exception e) {
+                                    Toast toast = Toast.makeText(MainActivity.this, "Перевірте коректність даних", Toast.LENGTH_SHORT);
+                                    toast.setGravity(Gravity.CENTER, 0, 0);
+                                    toast.show();
                                 }
                             })
-                            .setNegativeButton(R.string.dialog_negative_button, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.cancel();
-                                }
-                            });
+                            .setNegativeButton(R.string.dialog_negative_button, (dialog1, which) -> dialog1.cancel());
                     AlertDialog dialog2 = builder2.create();
                     dialog2.show();
                 } else {
@@ -158,16 +148,16 @@ public class MainActivity extends AppCompatActivity {
                 isToolbarShowed = !isToolbarShowed;
                 break;
             case R.id.undo:
-                State curr = painterView.state;
-                painterView.state = curr.getPrev();
-                painterView.mainBitmap = painterView.state.getValue();
-                painterView.invalidate();
+                painterView.setUndoBitmap();
                 break;
             case R.id.redo:
-                State curr1 = painterView.state;
-                painterView.state = curr1.getNext();
-                painterView.mainBitmap = painterView.state.getValue();
-                painterView.invalidate();
+                painterView.setRedoBitmap();
+                break;
+            case R.id.zoom_in:
+                painterView.zoomIn();
+                break;
+            case R.id.zoom_out:
+                painterView.zoomOut();
                 break;
             case R.id.exit:
                 finish();
@@ -175,12 +165,12 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void enableSave() {
+    public static void enableSave() {
         MenuItem changeSizeMenuItem = menu.findItem(R.id.save);
         changeSizeMenuItem.setEnabled(true);
     }
 
-    private void enableChangeSize() {
+    public static void enableChangeSize() {
         MenuItem changeSizeMenuItem = menu.findItem(R.id.change);
         changeSizeMenuItem.setEnabled(true);
     }
@@ -190,6 +180,8 @@ public class MainActivity extends AppCompatActivity {
         painterView.imageBitmap = null;
         painterView.showedShapes = new ArrayList<>();
         painterView.isDrawing = false;
+        painterView.bitmapIndex = -1;
+        painterView.bitmapsList = new ArrayList<>();
         if (imagineBitmap != null) {
             painterView.imageBitmap = imagineBitmap;
         }
@@ -223,9 +215,11 @@ public class MainActivity extends AppCompatActivity {
             enableSave();
             selectedImage = data.getData();
             try {
+                enableChangeSize();
+                enableSave();
                 Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
                 createDrawingPlace(imageBitmap.getWidth(), imageBitmap.getHeight(), "#FFFFFF", imageBitmap);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

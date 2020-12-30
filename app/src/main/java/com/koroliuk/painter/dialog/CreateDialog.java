@@ -68,6 +68,7 @@ public class CreateDialog extends DialogFragment {
                         if (height <= 0 || width <= 0) {
                             throw new Exception();
                         }
+                        MainActivity.enableChangeSize();
                         if (isChanging) {
                             MainActivity.changeSize(width, height, color);
                         } else {

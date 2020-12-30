@@ -16,7 +16,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
-import com.koroliuk.painter.State;
 import com.koroliuk.painter.editor.drawing_editor.BrushEditor;
 import com.koroliuk.painter.editor.drawing_editor.CubeEditor;
 import com.koroliuk.painter.editor.drawing_editor.ErasorEditor;
@@ -47,7 +46,6 @@ public class PainterView extends View {
     public MyScrollView scrollView;
     public MyHorizontalScrollView horizontalScrollView;
     public boolean isDrawing;
-    public State state;
     public List<Shape> showedShapes;
     public Bitmap mainBitmap;
     public Bitmap imageBitmap;
@@ -59,14 +57,15 @@ public class PainterView extends View {
     public boolean isFilled;
     public int width;
     public int selectedType;
-    public float sx;
-    public float sy;
-    public float ex;
-    public float ey;
+    public List<Bitmap> bitmapsList;
+    public int bitmapIndex;
+
 
 
     public PainterView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        bitmapIndex = -1;
+        bitmapsList = new ArrayList<>();
         backgroundColor = "#FFFFFF";
         paintStroke = new Paint(Paint.ANTI_ALIAS_FLAG);
         paintStroke.setStyle(Paint.Style.STROKE);
@@ -84,7 +83,7 @@ public class PainterView extends View {
             mainBitmap = imageBitmap.copy(Bitmap.Config.ARGB_8888, true);
         }
         canvas = new Canvas(mainBitmap);
-        state = new State(null, mainBitmap, null);
+        addToUndoList(mainBitmap);
     }
 
     @SuppressLint("DrawAllocation")
@@ -111,6 +110,7 @@ public class PainterView extends View {
         if (scrollView.isEnableScrolling()) {
             return true;
         }
+        deleteAllFromIndex(bitmapIndex);
         lastEdited.pStroke = new Paint(paintStroke);
         lastEdited.pFill = new Paint(paintFill);
         switch (selectedType) {
@@ -180,10 +180,70 @@ public class PainterView extends View {
     public void addToDrawen() {
         lastEdited.canvas = canvas;
         lastEdited.draw();
-        State newState = new State(state, mainBitmap, null);
-        state.setNext(newState);
-        state = newState;
+        addToUndoList(mainBitmap);
         start(lastEdited.type);
+        invalidate();
+    }
+
+    public void addToUndoList(Bitmap bitmap) {
+        while (true) {
+            try {
+                bitmapsList.add(bitmap.copy(bitmap.getConfig(), true));
+                bitmapIndex++;
+                break;
+            } catch (OutOfMemoryError error) {
+                bitmapsList.remove(0);
+            }
+        }
+    }
+
+    public void deleteAllFromIndex(int index) {
+        int d = bitmapsList.size()-index;
+        while (d > 0) {
+            bitmapsList.remove(bitmapsList.size()-1);
+            d--;
+        }
+    }
+
+    public void setUndoBitmap() {
+        if (bitmapIndex - 1 >= 0) {
+            mainBitmap = bitmapsList.get(bitmapIndex-1)
+                    .copy(bitmapsList.get(bitmapIndex-1).getConfig(), true);
+            bitmapIndex--;
+            canvas = new Canvas(mainBitmap);
+            invalidate();
+        }
+    }
+
+    public void setRedoBitmap() {
+        if (bitmapIndex + 1 <= bitmapsList.size()-1) {
+            mainBitmap = bitmapsList.get(bitmapIndex+1)
+                    .copy(bitmapsList.get(bitmapIndex+1).getConfig(), true);
+            bitmapIndex++;
+            canvas = new Canvas(mainBitmap);
+            invalidate();
+        }
+    }
+
+    public void zoomIn() {
+        if (imageBitmap == null) {
+            imageBitmap = mainBitmap.copy(mainBitmap.getConfig(), true);
+        }
+        int hold = imageBitmap.getHeight();
+        int wold = imageBitmap.getWidth();
+        imageBitmap = Bitmap.createScaledBitmap(imageBitmap, (int) (imageBitmap.getWidth()*0.8f), (int) (imageBitmap.getHeight()*0.8f), true);
+        canvas = new Canvas(mainBitmap);
+        invalidate();
+    }
+
+    public void zoomOut() {
+        if (imageBitmap == null) {
+            imageBitmap = mainBitmap.copy(mainBitmap.getConfig(), true);
+        }
+        int hold = imageBitmap.getHeight();
+        int wold = imageBitmap.getWidth();
+        imageBitmap = Bitmap.createScaledBitmap(imageBitmap, (int) (imageBitmap.getWidth()*1.2f), (int) (imageBitmap.getHeight()*1.2f), true);
+        onSizeChanged(imageBitmap.getWidth(), imageBitmap.getHeight(), wold, hold);
         invalidate();
     }
 
