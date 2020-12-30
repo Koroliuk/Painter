@@ -140,7 +140,7 @@ public class PainterView extends View {
         }
         return true;
     }
-
+    // функція, що створює lastedited після намалювання попереднього
     public void start(int type) {
         switch (type) {
             case 1:
@@ -175,7 +175,7 @@ public class PainterView extends View {
                 break;
         }
     }
-
+    // "додає" до растру
     public void addToDrawen() {
         lastEdited.canvas = canvas;
         lastEdited.draw();
@@ -195,7 +195,7 @@ public class PainterView extends View {
             }
         }
     }
-
+    // видаляє всі збережені стани бітмапу після певного моменту
     public void deleteAllFromIndex(int index) {
         int d = bitmapsList.size()-index;
         while (d > 0) {
@@ -223,7 +223,7 @@ public class PainterView extends View {
             invalidate();
         }
     }
-
+    // віддалення
     public void zoomIn() {
         if (imageBitmap == null) {
             imageBitmap = mainBitmap.copy(mainBitmap.getConfig(), true);
@@ -231,7 +231,7 @@ public class PainterView extends View {
         imageBitmap = Bitmap.createScaledBitmap(imageBitmap, (int) (imageBitmap.getWidth()*0.8f), (int) (imageBitmap.getHeight()*0.8f), true);
         MainActivity.createDrawingPlace(imageBitmap.getWidth(), imageBitmap.getHeight(), "#FFFFFF", imageBitmap);
     }
-
+    // зближення
     public void zoomOut() {
         if (imageBitmap == null) {
             imageBitmap = mainBitmap.copy(mainBitmap.getConfig(), true);
@@ -239,7 +239,7 @@ public class PainterView extends View {
         imageBitmap = Bitmap.createScaledBitmap(imageBitmap, (int) (imageBitmap.getWidth()*1.2f), (int) (imageBitmap.getHeight()*1.2f), true);
         MainActivity.createDrawingPlace(imageBitmap.getWidth(), imageBitmap.getHeight(), "#FFFFFF", imageBitmap);
     }
-
+    // збереження файлу
     public void saveFile(Uri image) throws IOException {
         final File file = new File(getRealPathFromURI(context, image));
         try (FileOutputStream fOut = new FileOutputStream(file)) {
@@ -262,7 +262,7 @@ public class PainterView extends View {
             }
         }
     }
-
+    // функція, що знаходить повний шлях з uri
     public String getRealPathFromURI(Context context, Uri contentUri) {
         Cursor cursor = null;
         try {
@@ -277,7 +277,7 @@ public class PainterView extends View {
             }
         }
     }
-
+    // функція збереження файлу
     public String saveFileAsPNG(String name) {
         String fullPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures";
         try {
