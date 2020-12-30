@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/zoom_in"
-        android:icon="@drawable/plus"
+        android:icon="@drawable/minus"
         app:showAsAction="always"
         android:title="" />
     <item android:id="@+id/zoom_out"
-        android:icon="@drawable/minus"
+        android:icon="@drawable/plus"
         app:showAsAction="always"
         android:title="" />
     <item android:id="@+id/undo"
@@ -31,7 +31,7 @@
     <item android:id="@+id/save"
         android:title="@string/save"
         android:enabled="false"/>
-    <item android:id="@+id/save_as_png"
+    <item android:id="@+id/save_as"
         android:title="@string/save_as">
     </item>
     <item android:id="@+id/exit"

@@ -1,4 +1,4 @@
-package com.koroliuk.painter.editor.drawings;
+package com.koroliuk.painter.editor.shapes;
 
 import android.graphics.Paint;
 

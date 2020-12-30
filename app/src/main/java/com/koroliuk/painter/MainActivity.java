@@ -1,10 +1,8 @@
 package com.koroliuk.painter;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
@@ -46,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private static Menu menu;
     private Uri selectedImage;
     private boolean isToolbarShowed;
-    private View tableView;
+    private View toolbar;
     private LinearLayout mainLayout;
     private ArrayList<ImageButton> imageButtons;
 
@@ -61,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
         LayoutInflater inflater = getLayoutInflater();
         mainLayout = findViewById(R.id.main_linear);
         mainLayout.removeView(painterView);
-        tableView = inflater.inflate(R.layout.toolbar, mainLayout, false);
-        mainLayout.addView(tableView);
+        toolbar = inflater.inflate(R.layout.toolbar, mainLayout, false);
+        mainLayout.addView(toolbar);
         mainLayout.addView(painterView);
         setToolBar();
         painterView.scrollView = findViewById(R.id.scroll);
@@ -100,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 break;
-            case R.id.save_as_png:
+            case R.id.save_as:
                 if (isExternalStorageWritable()) {
                     AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
                     LayoutInflater inflater2 = Objects.requireNonNull(getLayoutInflater());
@@ -139,10 +137,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.toolbar:
                 if (isToolbarShowed) {
-                    mainLayout.removeView(tableView);
+                    mainLayout.removeView(toolbar);
                 } else {
                     mainLayout.removeView(painterView);
-                    mainLayout.addView(tableView);
+                    mainLayout.addView(toolbar);
                     mainLayout.addView(painterView);
                 }
                 isToolbarShowed = !isToolbarShowed;

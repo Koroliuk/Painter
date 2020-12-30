@@ -16,19 +16,20 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
-import com.koroliuk.painter.editor.drawing_editor.BrushEditor;
-import com.koroliuk.painter.editor.drawing_editor.CubeEditor;
-import com.koroliuk.painter.editor.drawing_editor.ErasorEditor;
-import com.koroliuk.painter.editor.drawing_editor.LineEditor;
-import com.koroliuk.painter.editor.drawing_editor.OvalEditor;
-import com.koroliuk.painter.editor.drawing_editor.RectEditor;
-import com.koroliuk.painter.editor.drawings.Brush;
-import com.koroliuk.painter.editor.drawings.Cube;
-import com.koroliuk.painter.editor.drawings.Erasor;
-import com.koroliuk.painter.editor.drawings.Line;
-import com.koroliuk.painter.editor.drawings.Oval;
-import com.koroliuk.painter.editor.drawings.Rect;
-import com.koroliuk.painter.editor.drawings.Shape;
+import com.koroliuk.painter.MainActivity;
+import com.koroliuk.painter.editor.shape_editor.BrushEditor;
+import com.koroliuk.painter.editor.shape_editor.CubeEditor;
+import com.koroliuk.painter.editor.shape_editor.ErasorEditor;
+import com.koroliuk.painter.editor.shape_editor.LineEditor;
+import com.koroliuk.painter.editor.shape_editor.OvalEditor;
+import com.koroliuk.painter.editor.shape_editor.RectEditor;
+import com.koroliuk.painter.editor.shapes.Brush;
+import com.koroliuk.painter.editor.shapes.Cube;
+import com.koroliuk.painter.editor.shapes.Erasor;
+import com.koroliuk.painter.editor.shapes.Line;
+import com.koroliuk.painter.editor.shapes.Oval;
+import com.koroliuk.painter.editor.shapes.Rect;
+import com.koroliuk.painter.editor.shapes.Shape;
 import com.koroliuk.painter.scrolling.MyHorizontalScrollView;
 import com.koroliuk.painter.scrolling.MyScrollView;
 
@@ -59,8 +60,6 @@ public class PainterView extends View {
     public int selectedType;
     public List<Bitmap> bitmapsList;
     public int bitmapIndex;
-
-
 
     public PainterView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -229,35 +228,29 @@ public class PainterView extends View {
         if (imageBitmap == null) {
             imageBitmap = mainBitmap.copy(mainBitmap.getConfig(), true);
         }
-        int hold = imageBitmap.getHeight();
-        int wold = imageBitmap.getWidth();
         imageBitmap = Bitmap.createScaledBitmap(imageBitmap, (int) (imageBitmap.getWidth()*0.8f), (int) (imageBitmap.getHeight()*0.8f), true);
-        canvas = new Canvas(mainBitmap);
-        invalidate();
+        MainActivity.createDrawingPlace(imageBitmap.getWidth(), imageBitmap.getHeight(), "#FFFFFF", imageBitmap);
     }
 
     public void zoomOut() {
         if (imageBitmap == null) {
             imageBitmap = mainBitmap.copy(mainBitmap.getConfig(), true);
         }
-        int hold = imageBitmap.getHeight();
-        int wold = imageBitmap.getWidth();
         imageBitmap = Bitmap.createScaledBitmap(imageBitmap, (int) (imageBitmap.getWidth()*1.2f), (int) (imageBitmap.getHeight()*1.2f), true);
-        onSizeChanged(imageBitmap.getWidth(), imageBitmap.getHeight(), wold, hold);
-        invalidate();
+        MainActivity.createDrawingPlace(imageBitmap.getWidth(), imageBitmap.getHeight(), "#FFFFFF", imageBitmap);
     }
 
-    public void saveFile(Uri uri) throws IOException {
-        final File file = new File(getRealPathFromURI(context, uri));
+    public void saveFile(Uri image) throws IOException {
+        final File file = new File(getRealPathFromURI(context, image));
         try (FileOutputStream fOut = new FileOutputStream(file)) {
             String[] path = file.getAbsolutePath().split("\\.");
-            String ext = path[path.length - 1];
-            if (ext.equals("png")) {
+            String extension = path[path.length - 1];
+            if (extension.equals("png")) {
                 mainBitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
                 Toast toast = Toast.makeText(context, "Збережено", Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
-            } else if (ext.equals("jpeg")) {
+            } else if (extension.equals("jpeg")) {
                 mainBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
                 Toast toast = Toast.makeText(context, "Файл збережено", Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.CENTER, 0, 0);
@@ -273,11 +266,11 @@ public class PainterView extends View {
     public String getRealPathFromURI(Context context, Uri contentUri) {
         Cursor cursor = null;
         try {
-            String[] proj = { MediaStore.Images.Media.DATA };
-            cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            String[] result = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri,  result, null, null, null);
+            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
-            return cursor.getString(column_index);
+            return cursor.getString(columnIndex);
         } finally {
             if (cursor != null) {
                 cursor.close();

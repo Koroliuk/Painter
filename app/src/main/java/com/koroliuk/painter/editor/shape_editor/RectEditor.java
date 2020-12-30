@@ -1,11 +1,12 @@
-package com.koroliuk.painter.editor.drawing_editor;
+package com.koroliuk.painter.editor.shape_editor;
 
 import android.view.MotionEvent;
 
 import com.koroliuk.painter.editor.PainterView;
 
-public class CubeEditor extends Editor {
-    public CubeEditor(PainterView myEditor) {
+public class RectEditor extends Editor {
+
+    public RectEditor(PainterView myEditor) {
         super(myEditor);
     }
 

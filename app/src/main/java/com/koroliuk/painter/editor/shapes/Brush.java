@@ -1,6 +1,5 @@
-package com.koroliuk.painter.editor.drawings;
+package com.koroliuk.painter.editor.shapes;
 
-import android.graphics.Color;
 import android.graphics.Paint;
 
 public class Brush extends Shape {

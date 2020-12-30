@@ -1,4 +1,4 @@
-package com.koroliuk.painter.editor.drawing_editor;
+package com.koroliuk.painter.editor.shape_editor;
 
 import android.view.MotionEvent;
 
