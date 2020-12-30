@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Файл кольорів додатку -->
     <color name="color_primary">#139318</color>
     <color name="color_primary_dark">#139318</color>
     <color name="color_accent">#009688</color>

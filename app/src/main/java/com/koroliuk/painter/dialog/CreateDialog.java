@@ -21,12 +21,12 @@ import com.koroliuk.painter.MainActivity;
 import com.koroliuk.painter.R;
 
 import java.util.Objects;
-
+// Клас діалогового вікна створення растру
 public class CreateDialog extends DialogFragment {
 
     public int height;
     public int width;
-    public String color;
+    public String color; // колір фону
     public Context context;
     public boolean isChanging;
 
@@ -45,6 +45,7 @@ public class CreateDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.create_dialog, null);
         LinearLayout layout = view.findViewById(R.id.color);
         layout.setOnClickListener(v -> {
+            // Використання бібліотечного вікна створення власного кольору
             ColorPickerDialog colorPickerDialog = ColorPickerDialog.createColorPickerDialog(context);
             colorPickerDialog.setPositiveActionText("Обрати");
             colorPickerDialog.setNegativeActionText("Назад");
@@ -63,6 +64,7 @@ public class CreateDialog extends DialogFragment {
                 .setView(view)
                 .setPositiveButton(R.string.create_dialog_positive_button, (dialog, which) -> {
                     try {
+                        // Одержання даних
                         height = Integer.parseInt(String.valueOf(editTextHeight.getText()));
                         width = Integer.parseInt(String.valueOf(editTextWidth.getText()));
                         if (height <= 0 || width <= 0) {
@@ -75,6 +77,7 @@ public class CreateDialog extends DialogFragment {
                             MainActivity.createDrawingPlace(width, height, color, null);
                         }
                     } catch (Exception e) {
+                        // Ігнорування винятків для забезпечення роботи функції зміни розміру растра
                         if (!(e.toString().equals("java.lang.IllegalArgumentException: x + width must be <= bitmap.width()") ||
                                 e.toString().equals("java.lang.IllegalArgumentException: x + height must be <= bitmap.height()"))) {
                             Toast toast = Toast.makeText(context, "Перевірте коректність вхідних даних", Toast.LENGTH_SHORT);

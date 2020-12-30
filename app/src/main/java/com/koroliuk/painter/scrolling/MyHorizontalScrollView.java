@@ -9,6 +9,7 @@ import android.widget.HorizontalScrollView;
 
 import androidx.annotation.RequiresApi;
 
+// Клас горизонтального скролу
 public class MyHorizontalScrollView extends HorizontalScrollView {
 
     public void setEnableScrolling(boolean enableScrolling) {
@@ -38,6 +39,7 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
+    // Функція, що визначає дозвіл на обробку дотиків саме скролом, а не редактором
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
 

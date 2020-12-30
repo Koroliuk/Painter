@@ -9,6 +9,7 @@ import android.widget.ScrollView;
 
 import androidx.annotation.RequiresApi;
 
+// Клас вертикального скролу
 public class MyScrollView extends ScrollView {
 
     public void setEnableScrolling(boolean enableScrolling) {
@@ -38,6 +39,7 @@ public class MyScrollView extends ScrollView {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
+    // Функція, що визначає дозвіл на обробку дотиків саме скролом, а не редактором
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
 

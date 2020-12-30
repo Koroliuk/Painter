@@ -36,9 +36,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
+// Клас головного актівіті програми
 public class MainActivity extends AppCompatActivity {
 
+    // Ініціалізація редактора, панелі та меню
     @SuppressLint("StaticFieldLeak")
     private static PainterView painterView;
     private static Menu menu;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout mainLayout;
     private ArrayList<ImageButton> imageButtons;
 
+    // Створюємо інтерфейс екрану
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         painterView.scrollView = findViewById(R.id.scroll);
         painterView.horizontalScrollView = findViewById(R.id.scroll_hor);
     }
-
+    // Створення меню
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu, menu);
         return true;
     }
-
+    // Обробка натисків елементів меню
     @SuppressLint("NonConstantResourceId")
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -82,11 +84,13 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.create:
+                // Вікно створення растру
                 FragmentManager manager = getSupportFragmentManager();
                 CreateDialog dialog = new CreateDialog(this, false);
                 dialog.show(manager, "CreateDialog");
                 break;
             case R.id.open:
+                // Намір до програми, що обирає файли
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
                 startActivityForResult(intent, 1);
@@ -99,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.save_as:
+                // Вікно збереження файлу
                 if (isExternalStorageWritable()) {
                     AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
                     LayoutInflater inflater2 = Objects.requireNonNull(getLayoutInflater());
@@ -130,12 +135,14 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.change:
+                // Вікно зміни розміру
                 FragmentManager manager3 = getSupportFragmentManager();
                 CreateDialog dialog3 = new CreateDialog(this, true);
                 dialog3.color = painterView.backgroundColor;
                 dialog3.show(manager3, "CreateDialog");
                 break;
             case R.id.toolbar:
+                // Щезання та з'являння панель кнопок
                 if (isToolbarShowed) {
                     mainLayout.removeView(toolbar);
                 } else {
@@ -163,16 +170,17 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // активує можливість зберігати
     public static void enableSave() {
         MenuItem changeSizeMenuItem = menu.findItem(R.id.save);
         changeSizeMenuItem.setEnabled(true);
     }
-
+    // активує можливість зміни розміру
     public static void enableChangeSize() {
         MenuItem changeSizeMenuItem = menu.findItem(R.id.change);
         changeSizeMenuItem.setEnabled(true);
     }
-
+    // створює новий растр
     public static void createDrawingPlace(int width, int height, String color, Bitmap imagineBitmap) {
         painterView.mainBitmap = null;
         painterView.imageBitmap = null;
@@ -187,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
         painterView.setLayoutParams(params);
         painterView.backgroundColor = color;
     }
-
+    // змінює розмір растру
     public static void  changeSize(int w, int h, String color) {
         Bitmap bitmap = painterView.mainBitmap.copy(Bitmap.Config.ARGB_8888, true);
         int hr = bitmap.getHeight();
@@ -205,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
         painterView.backgroundColor = color;
         painterView.invalidate();
     }
-
+    // Результат обирання файлу
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -222,13 +230,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
+    // перевірка зовнішнього сховища на доступність
     public boolean isExternalStorageWritable()
     {
         String state = Environment.getExternalStorageState();
         return Environment.MEDIA_MOUNTED.equals(state);
     }
-
+    // визначення пенелі кнопок
     @RequiresApi(api = Build.VERSION_CODES.R)
     public void  setToolBar() {
         ImageButton buttonThick = findViewById(R.id.thickness);
@@ -402,7 +410,7 @@ public class MainActivity extends AppCompatActivity {
             });
         }
     }
-
+    // активація певної кнопки
     public void optionOn(ImageButton button) {
         for (ImageButton button1 : imageButtons) {
             button1.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
